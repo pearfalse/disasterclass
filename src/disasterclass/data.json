@@ -1,0 +1,2647 @@
+{
+    "Items": [
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 256, 
+            "Name": "Iron Shovel"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 257, 
+            "Name": "Iron Pickaxe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 258, 
+            "Name": "Iron Axe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 259, 
+            "Name": "Flint and Steel"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 260, 
+            "Name": "Apple"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 261, 
+            "Name": "Bow"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 262, 
+            "Name": "Arrow"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 263, 
+            "Name": "Coal"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 264, 
+            "Name": "Diamond"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 265, 
+            "Name": "Iron Ingot"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 266, 
+            "Name": "Gold Ingot"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 267, 
+            "Name": "Iron Sword"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 268, 
+            "Name": "Wooden Sword"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 269, 
+            "Name": "Wooden Shovel"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 270, 
+            "Name": "Wooden Pickaxe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 271, 
+            "Name": "Wooden Axe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 272, 
+            "Name": "Stone Sword"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 273, 
+            "Name": "Stone Shovel"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 274, 
+            "Name": "Stone Pickaxe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 275, 
+            "Name": "Stone Axe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 276, 
+            "Name": "Diamond Sword"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 277, 
+            "Name": "Diamond Shovel"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 278, 
+            "Name": "Diamond Pickaxe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 279, 
+            "Name": "Diamond Axe"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 280, 
+            "Name": "Stick"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 281, 
+            "Name": "Bowl"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 282, 
+            "Name": "Mushroom Stew"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 283, 
+            "Name": "Golden Sword"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 284, 
+            "Name": "Golden Shovel"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 285, 
+            "Name": "Golden Pickaxe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 286, 
+            "Name": "Golden Axe"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 287, 
+            "Name": "String"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 288, 
+            "Name": "Feather"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 289, 
+            "Name": "Gunpowder"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 290, 
+            "Name": "Wooden Hoe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 291, 
+            "Name": "Stone Hoe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 292, 
+            "Name": "Iron Hoe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 293, 
+            "Name": "Diamond Hoe"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "IsTool"
+            ], 
+            "Id": 294, 
+            "Name": "Gold Hoe"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 295, 
+            "Name": "Seeds"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 296, 
+            "Name": "Wheat"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 297, 
+            "Name": "Bread"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 298, 
+            "Name": "Leather Cap"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 299, 
+            "Name": "Leather Tunic"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 300, 
+            "Name": "Leather Pants"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 301, 
+            "Name": "Leather Boots"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 302, 
+            "Name": "Chain Helmet"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 303, 
+            "Name": "Chain Chestplate"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 304, 
+            "Name": "Chain Leggings"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 305, 
+            "Name": "Chain Boots"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 306, 
+            "Name": "Iron Helmet"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 307, 
+            "Name": "Iron Chestplate"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 308, 
+            "Name": "Iron Leggings"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 309, 
+            "Name": "Iron Boots"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 310, 
+            "Name": "Diamond Helmet"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 311, 
+            "Name": "Diamond Chestplate"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 312, 
+            "Name": "Diamond Leggings"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 313, 
+            "Name": "Diamond Boots"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 314, 
+            "Name": "Golden Helmet"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 315, 
+            "Name": "Golden Chestplate"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 316, 
+            "Name": "Golden Leggings"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 317, 
+            "Name": "Golden Boots"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 318, 
+            "Name": "Flint"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 319, 
+            "Name": "Raw Porkchop"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 320, 
+            "Name": "Cooked Porkchop"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 321, 
+            "Name": "Painting"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 322, 
+            "Name": "Golden Apple"
+        }, 
+        {
+            "MaxStack": 16, 
+            "Flags": [], 
+            "Id": 323, 
+            "Name": "Sign"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 324, 
+            "Name": "Wooden Door"
+        }, 
+        {
+            "MaxStack": 16, 
+            "Flags": [], 
+            "Id": 325, 
+            "Name": "Bucket"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 326, 
+            "Name": "Water Bucket"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 327, 
+            "Name": "Lava Bucket"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 328, 
+            "Name": "Minecart"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 329, 
+            "Name": "Saddle"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 330, 
+            "Name": "Iron Door"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 331, 
+            "Name": "Redstone"
+        }, 
+        {
+            "MaxStack": 16, 
+            "Flags": [], 
+            "Id": 332, 
+            "Name": "Snowball"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 333, 
+            "Name": "Boat"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 334, 
+            "Name": "Leather"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 335, 
+            "Name": "Milk"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 336, 
+            "Name": "Brick"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 337, 
+            "Name": "Clay"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 338, 
+            "Name": "Sugar Canes"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 339, 
+            "Name": "Paper"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 340, 
+            "Name": "Book"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 341, 
+            "Name": "Slimeball"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 342, 
+            "Name": "Minecart with Chest"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 343, 
+            "Name": "Minecart with Furnace"
+        }, 
+        {
+            "MaxStack": 16, 
+            "Flags": [], 
+            "Id": 344, 
+            "Name": "Egg"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 345, 
+            "Name": "Compass"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 346, 
+            "Name": "Fishing Rod"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 347, 
+            "Name": "Clock"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 348, 
+            "Name": "Glowstone Dust"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 349, 
+            "Name": "Raw Fish"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 350, 
+            "Name": "Cooked Fish"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 351, 
+            "Name": "Dye"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 352, 
+            "Name": "Bone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 353, 
+            "Name": "Sugar"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 354, 
+            "Name": "Cake"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 355, 
+            "Name": "Bed"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 356, 
+            "Name": "Redstone Repeater"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 357, 
+            "Name": "Cookie"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 358, 
+            "Name": "Map"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 359, 
+            "Name": "Shears"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 360, 
+            "Name": "Melon"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 361, 
+            "Name": "Pumpkin Seeds"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 362, 
+            "Name": "Melon Seeds"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 363, 
+            "Name": "Raw Beef"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 364, 
+            "Name": "Steak"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 365, 
+            "Name": "Raw Chicken"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 366, 
+            "Name": "Cooked Chicken"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 367, 
+            "Name": "Rotten Flesh"
+        }, 
+        {
+            "MaxStack": 16, 
+            "Flags": [], 
+            "Id": 368, 
+            "Name": "Ender Pearl"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 369, 
+            "Name": "Blaze Rod"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 370, 
+            "Name": "Ghast Tear"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 371, 
+            "Name": "Gold Nugget"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 372, 
+            "Name": "Nether Wart"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 373, 
+            "Name": "Potions"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 374, 
+            "Name": "Glass Bottle"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 375, 
+            "Name": "Spider Eye"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 376, 
+            "Name": "Fermented Spider Eye"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 377, 
+            "Name": "Blaze Powder"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 378, 
+            "Name": "Magma Cream"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 379, 
+            "Name": "Brewing Stand"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 380, 
+            "Name": "Cauldron"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 381, 
+            "Name": "Eye of Ender"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 382, 
+            "Name": "Glistering Melon"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 383, 
+            "Name": "Spawn Egg"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 384, 
+            "Name": "Bottle o' Enchanting"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 385, 
+            "Name": "Fire Charge"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 386, 
+            "Name": "Book and Quill"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 387, 
+            "Name": "Written Book"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 388, 
+            "Name": "Emerald"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 389, 
+            "Name": "Item Frame"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 390, 
+            "Name": "Flower Pot"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 391, 
+            "Name": "Carrot"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 392, 
+            "Name": "Potato"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 393, 
+            "Name": "Baked Potato"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 394, 
+            "Name": "Poisonous Potato"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 395, 
+            "Name": "Empty Map"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 396, 
+            "Name": "Golden Carrot"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 397, 
+            "Name": "Mob head"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 398, 
+            "Name": "Carrot on a Stick"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 399, 
+            "Name": "Nether Star"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 400, 
+            "Name": "Pumpkin Pie"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 401, 
+            "Name": "Firework Rocket"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 402, 
+            "Name": "Firework Star"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 403, 
+            "Name": "Enchanted Book"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 404, 
+            "Name": "Redstone Comparator"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 405, 
+            "Name": "Nether Brick"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [], 
+            "Id": 406, 
+            "Name": "Nether Quartz"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 407, 
+            "Name": "Minecart with TNT"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 408, 
+            "Name": "Minecart with Hopper"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2256, 
+            "Name": "13 Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2257, 
+            "Name": "Cat Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2258, 
+            "Name": "blocks Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2259, 
+            "Name": "chirp Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2260, 
+            "Name": "far Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2261, 
+            "Name": "mall Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2262, 
+            "Name": "mellohi Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2263, 
+            "Name": "stal Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2264, 
+            "Name": "strad Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2265, 
+            "Name": "ward Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2266, 
+            "Name": "11 Disc"
+        }, 
+        {
+            "MaxStack": 1, 
+            "Flags": [], 
+            "Id": 2267, 
+            "Name": "wait Disc"
+        }
+    ], 
+    "Blocks": [
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent"
+            ], 
+            "Id": 0, 
+            "Name": "Air"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 1, 
+            "Name": "Stone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 2, 
+            "Name": "Grass Block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 3, 
+            "Name": "Dirt"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 4, 
+            "Name": "Cobblestone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 5, 
+            "Name": "Wood Planks"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 6, 
+            "Name": "Saplings"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 7, 
+            "Name": "Bedrock"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 8, 
+            "Name": "Water"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 9, 
+            "Name": "Stationary Water"
+        }, 
+        {
+            "Light": 14, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 10, 
+            "Name": "Lava"
+        }, 
+        {
+            "Light": 14, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData"
+            ], 
+            "Id": 11, 
+            "Name": "Stationary Lava"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 12, 
+            "Name": "Sand"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 13, 
+            "Name": "Gravel"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 14, 
+            "Name": "Gold Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 15, 
+            "Name": "Iron Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 16, 
+            "Name": "Coal Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 17, 
+            "Name": "Wood"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Solid"
+            ], 
+            "Id": 18, 
+            "Name": "Leaves"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 19, 
+            "Name": "Sponge"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "FloorSupport",
+                "Solid"
+            ], 
+            "Id": 20, 
+            "Name": "Glass"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 21, 
+            "Name": "Lapis Lazuli Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 22, 
+            "Name": "Lapis Lazuli Block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 23, 
+            "Name": "Dispenser"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 24, 
+            "Name": "Sandstone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 25, 
+            "Name": "Note Block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 26, 
+            "Name": "Bed"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 27, 
+            "Name": "Powered Rail"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 28, 
+            "Name": "Detector Rail"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 29, 
+            "Name": "Sticky Piston"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent"
+            ], 
+            "Id": 30, 
+            "Name": "Cobweb"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 31, 
+            "Name": "Grass"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 32, 
+            "Name": "Dead Bush"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 33, 
+            "Name": "Piston"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 34, 
+            "Name": "Piston Extension"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 35, 
+            "Name": "Wool"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity", 
+                "SensitiveToPlacement",
+                "Solid"
+            ], 
+            "Id": 36, 
+            "Name": "Block moved by Piston"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 37, 
+            "Name": "Dandelion"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 38, 
+            "Name": "Rose"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 39, 
+            "Name": "Brown Mushroom"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 40, 
+            "Name": "Red Mushroom"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 41, 
+            "Name": "Block of Gold"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 42, 
+            "Name": "Block of Iron"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 43, 
+            "Name": "Double Slabs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Solid"
+            ], 
+            "Id": 44, 
+            "Name": "Slabs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque"
+            ], 
+            "Id": 45, 
+            "Name": "Bricks"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 46, 
+            "Name": "TNT"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 47, 
+            "Name": "Bookshelf"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 48, 
+            "Name": "Moss Stone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 49, 
+            "Name": "Obsidian"
+        }, 
+        {
+            "Light": 14, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 50, 
+            "Name": "Torch"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 51, 
+            "Name": "Fire"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity",
+                "Solid"
+            ], 
+            "Id": 52, 
+            "Name": "Monster Spawner"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Solid"
+            ], 
+            "Id": 53, 
+            "Name": "Oak Wood Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Solid"
+            ], 
+            "Id": 54, 
+            "Name": "Chest"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 55, 
+            "Name": "Redstone Wire"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 56, 
+            "Name": "Diamond Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 57, 
+            "Name": "Block of Diamond"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 58, 
+            "Name": "Crafting Table"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 59, 
+            "Name": "Wheat"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 60, 
+            "Name": "Farmland"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 61, 
+            "Name": "Furnace"
+        }, 
+        {
+            "Light": 13, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 62, 
+            "Name": "Burning Furnace"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "TileEntity", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 63, 
+            "Name": "Sign Post"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 64, 
+            "Name": "Wooden Door"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 65, 
+            "Name": "Ladders"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 66, 
+            "Name": "Rail"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 67, 
+            "Name": "Cobblestone Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 68, 
+            "Name": "Wall Sign"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 69, 
+            "Name": "Lever"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "Transparent"
+            ], 
+            "Id": 70, 
+            "Name": "Stone Pressure Plate"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 71, 
+            "Name": "Iron Door"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "Transparent"
+            ], 
+            "Id": 72, 
+            "Name": "Wooden Pressure Plate"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 73, 
+            "Name": "Redstone Ore"
+        }, 
+        {
+            "Light": 9, 
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 74, 
+            "Name": "Glowing Redstone Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 75, 
+            "Name": "Redstone Torch (inactive)"
+        }, 
+        {
+            "Light": 7, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 76, 
+            "Name": "Redstone Torch (active)"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 77, 
+            "Name": "Stone Button"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement",
+                "Solid"
+            ], 
+            "Id": 78, 
+            "Name": "Snow"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Solid"
+            ], 
+            "Id": 79, 
+            "Name": "Ice"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 80, 
+            "Name": "Snow Block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 81, 
+            "Name": "Cactus"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 82, 
+            "Name": "Clay"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 83, 
+            "Name": "Sugar Cane"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 84, 
+            "Name": "Jukebox"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 85, 
+            "Name": "Fence"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 86, 
+            "Name": "Pumpkin"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 87, 
+            "Name": "Netherrack"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 88, 
+            "Name": "Soul Sand"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 89, 
+            "Name": "Glowstone"
+        }, 
+        {
+            "Light": 11, 
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement"
+            ], 
+            "Id": 90, 
+            "Name": "Nether Portal"
+        }, 
+        {
+            "Light": 14, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 91, 
+            "Name": "Jack 'o' Lantern"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId",
+                "Solid"
+            ], 
+            "Id": 92, 
+            "Name": "Cake Block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId",
+                "Solid"
+            ], 
+            "Id": 93, 
+            "Name": "Redstone Repeater (inactive)"
+        }, 
+        {
+            "Light": 9, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId",
+                "Solid"
+            ], 
+            "Id": 94, 
+            "Name": "Redstone Repeater (active)"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 95, 
+            "Name": "Locked Chest"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 96, 
+            "Name": "Trapdoor"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Solid"
+            ], 
+            "Id": 97, 
+            "Name": "Monster Egg"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 98, 
+            "Name": "Stone Bricks"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 99, 
+            "Name": "Huge Brown Mushroom"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 100, 
+            "Name": "Huge Red Mushroom"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 101, 
+            "Name": "Iron Bars"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 102, 
+            "Name": "Glass Pane"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 103, 
+            "Name": "Melon"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 104, 
+            "Name": "Pumpkin Stem"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 105, 
+            "Name": "Melon Stem"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 106, 
+            "Name": "Vines"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 107, 
+            "Name": "Fence Gate"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 108, 
+            "Name": "Brick Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 109, 
+            "Name": "Stone Brick Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 110, 
+            "Name": "Mycelium"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 111, 
+            "Name": "Lily Pad"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 112, 
+            "Name": "Nether Brick"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 113, 
+            "Name": "Nether Brick Fence"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 114, 
+            "Name": "Nether Brick Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 115, 
+            "Name": "Nether Wart"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity",
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 116, 
+            "Name": "Enchantment Table"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity", 
+                "DifferentItemId", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 117, 
+            "Name": "Brewing Stand"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId" 
+            ], 
+            "Id": 118, 
+            "Name": "Cauldron"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity", 
+                "SensitiveToPlacement"
+            ], 
+            "Id": 119, 
+            "Name": "End Portal"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement",
+                "Solid"
+            ], 
+            "Id": 120, 
+            "Name": "End Portal block"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 121, 
+            "Name": "End Stone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement",
+                "Solid"
+            ], 
+            "Id": 122, 
+            "Name": "Dragon Egg"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque"
+            ], 
+            "Id": 123, 
+            "Name": "Redstone Lamp (inactive)"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque"
+            ], 
+            "Id": 124, 
+            "Name": "Redstone Lamp (active)"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 125, 
+            "Name": "Wooden Double Slab"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "UsesDamage",
+                "Solid"
+            ], 
+            "Id": 126, 
+            "Name": "Wooden Slab"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 127, 
+            "Name": "Cocoa"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 128, 
+            "Name": "Sandstone Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 129, 
+            "Name": "Emerald Ore"
+        }, 
+        {
+            "Light": 7, 
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Solid"
+            ], 
+            "Id": 130, 
+            "Name": "Ender Chest"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 131, 
+            "Name": "Tripwire Hook"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 132, 
+            "Name": "Tripwire"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 133, 
+            "Name": "Block of Emerald"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 134, 
+            "Name": "Spruce Wood Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 135, 
+            "Name": "Birch Wood Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 136, 
+            "Name": "Jungle Wood Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 137, 
+            "Name": "Command Block"
+        }, 
+        {
+            "Light": 15, 
+            "MaxStack": 64, 
+            "Flags": [
+                "TileEntity", 
+                "Transparent"
+            ], 
+            "Id": 138, 
+            "Name": "Beacon"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "UsesDamage", 
+                "HasData",
+                "Solid"
+            ], 
+            "Id": 139, 
+            "Name": "Cobblestone Wall"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent"
+            ], 
+            "Id": 140, 
+            "Name": "Flower Pot"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 141, 
+            "Name": "Carrots"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 142, 
+            "Name": "Potatoes"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 143, 
+            "Name": "Wooden Button"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity", 
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 144, 
+            "Name": "Mob head"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement",
+                "Solid"
+            ], 
+            "Id": 145, 
+            "Name": "Anvil"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Solid"
+            ], 
+            "Id": 146, 
+            "Name": "Trapped Chest"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 147, 
+            "Name": "Weighted Pressure Plate (Light)"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 148, 
+            "Name": "Weighted Pressure Plate (Heavy)"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 149, 
+            "Name": "Redstone Comparator (inactive)"
+        }, 
+        {
+            "Light": 9, 
+            "MaxStack": 64, 
+            "Flags": [
+                "DifferentItemId", 
+                "SensitiveToPlacement", 
+                "DifferentItemId", 
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 150, 
+            "Name": "Redstone Comparator (active)"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Transparent",
+                "Solid"
+            ], 
+            "Id": 151, 
+            "Name": "Daylight Sensor"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 152, 
+            "Name": "Block of Redstone"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 153, 
+            "Name": "Nether Quartz Ore"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Solid"
+            ], 
+            "Id": 154, 
+            "Name": "Hopper"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 155, 
+            "Name": "Block of Quartz"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 156, 
+            "Name": "Quartz Stairs"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "SensitiveToPlacement", 
+                "Transparent"
+            ], 
+            "Id": 157, 
+            "Name": "Activator Rail"
+        }, 
+        {
+            "MaxStack": 64, 
+            "Flags": [
+                "HasData", 
+                "TileEntity",
+                "Opaque",
+                "Solid"
+            ], 
+            "Id": 158, 
+            "Name": "Dropper"
+        }
+    ]
+}
