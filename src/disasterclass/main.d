@@ -21,8 +21,9 @@ import std.file;
 import std.stdio;
 import std.exception;
 import std.algorithm;
+import std.range : lockstep;
 import std.string;
-import std.array : join, joiner;
+import std.array : join, joiner, minimallyInitializedArray;
 import std.format : formattedRead;
 import std.conv;
 import std.getopt;
@@ -238,9 +239,17 @@ ExitCode main_stats(string[] args)
 	// stats contexts
 	class StatsMTContext : MTContext
 	{
+		// this type lets us rearrange the block ids, to sort them later
+		alias Tuple!(BlockID, "blockID", ulong, "count") Counts_t;
+
 		this()
 		{
-			mCounts = new ulong[NBlockTypes];
+			mCounts = new Counts_t[NBlockTypes];
+			//mCounts = minimallyInitializedArray!(Counts_t[])(NBlockTypes);
+			foreach (BlockID i, ref c ; mCounts) {
+				c.blockID = i;
+				c.count = 0UL;
+			}
 		}
 
 		override void processMessage(Variant v)
@@ -248,10 +257,13 @@ ExitCode main_stats(string[] args)
 			debug stderr.writefln("StatsMTContext found message %s", v.type);
 			BlockCounts* msg = v.peek!(BlockCounts);
 			assert(msg);
-			mCounts[] += msg.blockCounts[];
+			//mCounts[] += msg.blockCounts[];
+			foreach (src, ref dst ; lockstep(msg.blockCounts[], mCounts)) {
+				dst.count += src;
+			}
 		}
 
-		private ulong[] mCounts;
+		private Counts_t[] mCounts;
 	}
 
 	class StatsContext : WTContext
@@ -277,27 +289,30 @@ ExitCode main_stats(string[] args)
 		}
 	}
 
-	auto ct = new StatsMTContext;
+	scope ct = new StatsMTContext;
 	auto result = runParallelTask(mainWorld, dimension, typeid(StatsContext), ct, Options.nThreads);
 
-	immutable(ulong)[] counts = ct.mCounts.assumeUnique();
-
-
+	immutable(StatsMTContext.Counts_t)[] counts = ct.mCounts[].sort!"a.count > b.count"().release().assumeUnique();
 
 	writeln("Stats results:");
 	bool foundSomeBlocks = false;
-	ulong totalBlocks = reduce!"a + b"(counts[1..$]); // don't include air, it skews the results
-	foreach (type, count ; counts) {
-		if (count == 0) continue;
+	ulong totalBlocks = reduce!"a + b.count"(0UL, counts); // don't include air, it skews the results
+
+	foreach (pair ; counts) {
+
+		if (pair.count == 0) continue;
 		foundSomeBlocks = true;
 
 		// clearer formatting
 		string factor = null;
-		if (type != 0) {
-			auto percentage = cast(double) counts[type] / totalBlocks * 100;
-			if (percentage >= 0.0001) factor = " (%.04f%%)".format(percentage);
+		if (pair.blockID != 0) {
+			auto percentage = cast(double) pair.count / totalBlocks * 100;
+			//debug stderr.writefln("%d / %d * 100 = %.2f", pair.count, totalBlocks, percentage);
+			factor = " (%.04f%% of remaining blocks)".format(percentage);
 		}
-		writefln("%s (%d): %d%s", blockOrItemName(cast(BlockID) type), type, counts[type], factor);
+		writefln("%s (%d): %d%s", blockOrItemName(cast(BlockID) pair.blockID), pair.blockID, pair.count, factor);
+		//debug stderr.writefln("totalBlocks: %d - %d = %d", totalBlocks, pair.count, totalBlocks - pair.count);
+		totalBlocks -= pair.count; // update percentage to discount higher-count blocks that came before
 	}
 	writeln();
 	if (result.skipped) {
