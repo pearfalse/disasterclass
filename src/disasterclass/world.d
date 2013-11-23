@@ -98,6 +98,16 @@ class World
 	@property string path() const { return mPath; }
 	@property string name() const { return mName; }
 
+	@property string name(string newName)
+	{
+		levelRootNode["Data"]["LevelName"].stringValue = newName;
+		mName = newName;
+
+		return newName;
+	}
+
+	NBTNode levelRootNode;
+
 	/// Returns the number of chunks in the given dimension of this world.
 	int numberOfChunks(Dimension dim = Dimension.Overworld) const
 	in {
@@ -262,5 +272,4 @@ private:
 	}
 
 	string mPath, mName;
-	NBTNode levelRootNode;
 }

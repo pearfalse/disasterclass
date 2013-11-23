@@ -58,7 +58,7 @@ package final class Chunk
 		T[X*Y*Z] array;
 		alias array this;
 
-		T opIndex(uint x, uint y, uint z)
+		T opIndex(uint x, uint y, uint z) const
 		in {
 			assert(x < X, "BlockArray.opIndex x out of bounds: "~x.to!string()~" >= "~X.to!string());
 			assert(y < Y, "BlockArray.opIndex y out of bounds: "~y.to!string()~" >= "~Y.to!string());
@@ -650,3 +650,32 @@ void dither(Chunk c)
 	}
 	c.modified = true;
 }
+
+/// Flip an entire world upside down.
+void australia(Chunk c)
+{
+	void flip(T, uint X, uint Y, uint Z)(ref Chunk.BlockArray!(T, X, Y, Z) ba)
+	{
+		foreach (z ; 0..Z) foreach (x ; 0..X) foreach (y ; 0..Y/2) {
+			uint yrev = Y-1 - y;
+			auto t = ba[x, y, z];
+			ba[x, y, z] = ba[x, yrev, z];
+			ba[x, yrev, z] = t;
+
+			debug(none) {
+				if (c.coord == CoordXZ(0, 0) && x == (z - 1)) stderr.writefln("Swapping (%d,%d,%d) and (%d,%d,%d)", x, y, z, x, yrev, z);
+			}
+		}
+	}
+
+	flip!(BlockID, 16, 256, 16)(c.blocks);
+	flip!(ubyte, 16, 256, 16)(c.blockData);
+	flip!(ubyte, 16, 256, 16)(c.blockLight);
+
+	// apparently minecraft disagrees with this analysis -- TODO: why?
+	c.mHeightMap[] = 256u;
+	c.skyLight.array[] = 0u;
+
+	c.modified = true;
+}
+

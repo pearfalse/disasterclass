@@ -47,6 +47,7 @@ static this()
 	cmdstemp["stoneage"   ] = &main_stoneage;
 	cmdstemp["dither"     ] = &main_dither;
 	cmdstemp["cityscape"  ] = &main_cityscape;
+	cmdstemp["australia"  ] = &main_australia;
 
 	cmdstemp["querydata"] = &main_querydata;
 
@@ -480,6 +481,29 @@ ExitCode main_cityscape(string[] args)
 
 	mainWorld.updateTimestamp();
 	mainWorld.saveLevelDat("[dc13:cityscape]");
+
+	return ExitCode.Success;
+}
+
+ExitCode main_australia(string[] args)
+{
+	class AustraliaContext : WTContext
+	{
+		override void processChunk(Chunk chunk, WorkerTaskId, Tid)
+		{
+			chunk.australia();
+		}
+	}
+
+	runParallelTask(mainWorld, Dimension.Overworld, typeid(AustraliaContext), null, Options.nThreads);
+
+	// flip the player's Y position
+	auto ynode = mainWorld.levelRootNode["Data"]["Player"]["Pos"][1];
+	ynode.doubleValue = 255 - ynode.doubleValue;
+
+	mainWorld.updateTimestamp();
+	mainWorld.name = mainWorld.name.dup.reverse.assumeUnique();
+	mainWorld.saveLevelDat("[DC: Australia]");
 
 	return ExitCode.Success;
 }
