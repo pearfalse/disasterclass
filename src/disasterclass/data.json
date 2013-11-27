@@ -985,6 +985,36 @@
             "Name": "Minecart with Hopper"
         }, 
         {
+            "MaxStack": 1,
+            "Flags": [],
+            "Id": 417,
+            "Name": "Iron Horse Armor"
+        },
+        {
+            "MaxStack": 1,
+            "Flags": [],
+            "Id": 418,
+            "Name": "Gold Horse Armor"
+        },
+        {
+            "MaxStack": 1,
+            "Flags": [],
+            "Id": 419,
+            "Name": "Diamond Horse Armor"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [],
+            "Id": 420,
+            "Name": "Lead"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [],
+            "Id": 421,
+            "Name": "Name Tag"
+        },
+        {
             "MaxStack": 1, 
             "Flags": [], 
             "Id": 2256, 
@@ -1960,7 +1990,7 @@
                 "Solid"
             ], 
             "Id": 91, 
-            "Name": "Jack 'o' Lantern"
+            "Name": "Jack o' Lantern"
         }, 
         {
             "MaxStack": 64, 
@@ -2642,6 +2672,45 @@
             ], 
             "Id": 158, 
             "Name": "Dropper"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid",
+                "HasData",
+                "UsesDamage"
+            ],
+            "Id": 159,
+            "Name": "Stained Clay"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ],
+            "Id": 170,
+            "Name": "Hay Bale"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "HasData",
+                "UsesDamage"
+            ],
+            "Id": 171,
+            "Name": "Carpet"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ],
+            "Id": 172,
+            "Name": "Hardened Clay"
         }
     ]
 }

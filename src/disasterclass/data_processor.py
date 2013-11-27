@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 
 def quoteAndEscape(s):
-	"""Enquote s, escaping quote marks and backslashes. As a convenience, \\n and \\r are also stripped."""
+	r"""Enquote s, escaping quote marks and backslashes. As a convenience, \n and \r are also stripped."""
 	return "\"%s\"" % s.replace("\n",'').replace("\r",'').replace("\\", "\\\\").replace("\"", "\\\"")
 
 # print(sys.argv)
@@ -44,6 +44,7 @@ module disasterclass.data;
 import disasterclass.support;
 
 import std.exception : assumeUnique;
+import std.string : format;
 
 public {
 	string blockOrItemName(BlockID block, BlockData data = 0)
@@ -52,12 +53,12 @@ public {
 	}
 	body
 	{
-		// note that this code uses the assumption that blocks <= 255, items > 255.
+		// note that this code uses the assumption that blocks < 256, items >= 256.
 		// it won't be this way forever.
 
 		if (block <= 255) {
 			auto firstMatchB = block in Blocks;
-			if (firstMatchB is null || firstMatchB.name is null) return "[unknown block]";
+			if (firstMatchB is null || firstMatchB.name is null) return "[unknown block %%d]".format(block);
 
 			if (firstMatchB.subData is null) return firstMatchB.name;
 			return firstMatchB.subData.subName[data];
@@ -65,7 +66,7 @@ public {
 
 		else {
 			auto firstMatchI = block in Items;
-			if (firstMatchI is null || firstMatchI.name is null) return "[unknown item]";
+			if (firstMatchI is null || firstMatchI.name is null) return "[unknown item %%d]".format(block);
 
 			// todo: use damage for subitem
 			return firstMatchI.name;
