@@ -25,6 +25,7 @@ import std.array : uninitializedArray;
 import std.stdio;
 import std.random;
 import std.math : ceil;
+import std.variant;
 
 debug {
 	import std.bitmanip;
@@ -127,7 +128,15 @@ package final class Chunk
 	BlockArray!(BlockID, 16, 256, 16) blocks;
 	ChunkArray blockData, skyLight, blockLight;
 
+	Variant[void*] customData; /// Holds references to algorithm-specific data. Algorithms should use a pointer to their primary function as their key.
+
 	bool modified = false;
+
+	/// Pretty-prints the identity of this chunk.
+	override string toString() const
+	{
+		return "Chunk at "~mCoord.toString();
+	}
 
 	/++
 		Create a new decoded chunk. The constructor asks for the raw NBT to ensure it can deallocate nodes it rearranges.
@@ -534,6 +543,71 @@ unittest
 	CoordXZ a = CoordXZ(-33, -2), b = CoordXZ(-1, -2);
 }
 
+/** Holds data about neighbouring chunks. This helper struct allows fast getting and setting of custom properties of a chunk or its local neighbours, without having to bake the index arithmetic and conditional ignoring into the user code.
+
+This is designed to refer to $(D_KEYWORD BlockArray)s of various sizes, and strongly exposes reference semantics to eliminate static array copying.
+**/
+struct ChunkDataNeighbourhood(string MemberName, T : ChunkDataNeighbourhoodValueType!MemberName)
+{
+	enum size_t Radius = 1, CentreIndex = 2 * Radius * (Radius + 1), LogicalWidth = 2 * Radius + 1;
+
+	private static autoDefaultValue = T.init;
+
+	/// Constructs the data neighbourhood, holding a reference to the default value if the chunk in question does not exist.
+	this(ref T defaultValue)
+	{
+		mDefaultValue = &defaultValue;
+	}
+
+	/// Call this if the central chunk changes after $(D_KEYWORD this) has been created.
+	void update(ref T delegate(Chunk) dg)
+	{
+		foreach (chunk, ref dst ; lockstep(chunkNeighbours[], data[])) {
+			dst = &dg(chunk);
+		}
+	}
+
+	/// Get property
+	ref T opIndex(int x, int z)
+	in {
+		assert(x >= -Radius, "x (%d) < %d".format(x, -Radius));
+		assert(z >= -Radius, "z (%d) < %d".format(z, -Radius));
+		assert(x <=  Radius, "x (%d) > %d".format(x,  Radius));
+		assert(z <=  Radius, "z (%d) > %d".format(z,  Radius));
+	} body
+	{
+		auto target = data[CentreIndex + (z * LogicalWidth) + x];
+		return *target;
+	}
+
+	/// Set property in a neighbour-aware fashion. Due to ChunkDataNeighbourhood's $(I ignore null set) policy, the result of the assignment expression is not returned.
+	void opIndexAssign(T value, int x, int z)
+	in {
+		assert(x >= -Radius, "x (%d) < %d".format(x, -Radius));
+		assert(z >= -Radius, "z (%d) < %d".format(z, -Radius));
+		assert(x <=  Radius, "x (%d) > %d".format(x,  Radius));
+		assert(z <=  Radius, "z (%d) > %d".format(z,  Radius));
+	} body
+	{
+		T* target = data[CentreIndex + (z * LogicalWidth) + x];
+		return mixin("target."~MemberName~" = value");
+	}
+
+	T*[9] data;
+	private T* mDefaultValue;
+
+	version(none) {
+		private struct _UnittestToken {}
+		private this(_UnittestToken) {}
+	}
+
+}
+
+private template ChunkDataNeighbourhoodValueType(string MemberName)
+{
+	alias ChunkDataNeighbourhoodValueType = typeof(mixin( "(cast(Chunk) null)."~MemberName ));
+}
+
 /++
 
 	Extremely basic, hardcoded StoneAge filter for $(I Disasterclass)'s true purpose. This filter:
@@ -542,8 +616,6 @@ unittest
 		$(LI converts plain stone to cobblestone;)
 		$(LI converts all stone brick to plain stone.)
 	)
-
-	All probability and randomness is redundant code at this stage; this function converts 100% of blocks.
 
 +/
 void basicStoneAge(Chunk c)
@@ -672,10 +744,9 @@ void australia(Chunk c)
 	flip!(ubyte, 16, 256, 16)(c.blockData);
 	flip!(ubyte, 16, 256, 16)(c.blockLight);
 
-	// apparently minecraft disagrees with this analysis -- TODO: why?
+	// apparently minecraft disagrees with this analysis -- TODO: why? [Could well be because this world type confuses Minecraft]
 	c.mHeightMap[] = 256u;
 	c.skyLight.array[] = 0u;
 
 	c.modified = true;
 }
-
