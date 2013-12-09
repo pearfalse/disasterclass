@@ -13,7 +13,7 @@ struct Version
 	enum uint
 	 Major     = 0
 	,Minor     = 0
-	,Revision  = 30
+	,Revision  = 31
 	;
 	// uint BuildNumber;
 

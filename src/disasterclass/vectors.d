@@ -239,6 +239,10 @@ struct Extents
 	Tuple!(int, "west", int, "east", int, "north", int, "south") _tupleElements;
 	alias _tupleElements this;
 
+	/** Creates a new $(D_KEYWORD Extents) from four distinct points.
+
+	The parameter order of this constructor is considered to be $(I really stupid), and will change in a future version.
+	**/
 	this(int w, int e, int n, int s)
 	{
 		west = w; east = e;
@@ -268,6 +272,7 @@ struct Extents
 		that.z >= north && that.z < south;
 	}
 
+	/// Promotes $(D_KEYWORD this) to the minimum bounding box that contains both $(D_KEYWORD this) and $(D_KEYWORD that).
 	ref Extents opOpAssign(string op : "+")(Extents that)
 	{
 		west  = min(west, that.west);
