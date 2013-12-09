@@ -337,6 +337,7 @@ package class Region
 		*/
 		@property CoordXZ front()
 		in {
+			assert(!empty, "Trying to produce front for an empty range");
 			assert(mRegion, "mRegion is not front-able");
 		}
 		body
