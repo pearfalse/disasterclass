@@ -275,22 +275,16 @@ ExitCode main_stats(string[] args)
 	{
 		ulong[NBlockTypes] blocks;
 
-		override void processChunk(Chunk c, WorkerTaskId taskId, Tid)
+		override void processChunk(Chunk c)
 		{
-			debug(none) {
-				stderr.writefln("[WT%d] [StatsContext] processChunk", taskId);
-			}
 			foreach (BlockID blk, BlockData data ; c) {
 				++blocks[blk];
 			}
 		}
 
-		override void cleanup(WorkerTaskId taskId, Tid parentTid)
+		override void cleanup()
 		{
-			debug(none) {
-				stderr.writefln("[WT%d] [StatsContext] Sending final block counts", taskId);
-			}
-			parentTid.send(BlockCounts( taskId, blocks[].assumeUnique() ));
+			mParentTid.send(BlockCounts( mTaskId, blocks[].assumeUnique() ));
 		}
 	}
 
@@ -410,10 +404,9 @@ ExitCode main_stoneage(string[] args)
 			Chunk.seedThisThread(Chunk.rngSeed);
 		}
 
-		override void processChunk(Chunk c, WorkerTaskId taskId, Tid parentTid)
+		override void processChunk(Chunk c)
 		{
 			c.basicStoneAge();
-			//if (Options.itinerary.get("relight", true)) c.relight();
 		}
 	}
 
@@ -454,7 +447,7 @@ ExitCode main_dither(string[] args)
 
 	class DitherContext : WTContext
 	{
-		override void processChunk(Chunk chunk, WorkerTaskId taskId, Tid parentTid)
+		override void processChunk(Chunk chunk)
 		{
 			chunk.dither();
 		}
@@ -475,7 +468,7 @@ ExitCode main_cityscape(string[] args)
 {
 	class CityscapeContext : WTContext
 	{
-		override void processChunk(Chunk chunk, WorkerTaskId taskId, Tid parentTid)
+		override void processChunk(Chunk chunk)
 		{
 			chunk.cityscape();
 		}
@@ -493,7 +486,7 @@ ExitCode main_australia(string[] args)
 {
 	class AustraliaContext : WTContext
 	{
-		override void processChunk(Chunk chunk, WorkerTaskId, Tid)
+		override void processChunk(Chunk chunk)
 		{
 			chunk.australia();
 		}
@@ -541,7 +534,7 @@ void relightWorld()
 	// relight the world
 	class RelightWTContext : WTContext
 	{
-		override void processChunk(Chunk c, WorkerTaskId _1, Tid _2)
+		override void processChunk(Chunk c)
 		{
 			c.relight2();
 		}

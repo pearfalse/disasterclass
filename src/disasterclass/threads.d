@@ -53,22 +53,27 @@ private:
 
 package class WTContext
 {
-	/// Per-thread setup
+	/// Per-thread setup.
 	void begin(WorkerTaskId, Tid) { }
 
 	/// Called whenever a chunk is created in local memory. Do $(B not) rely on $(D_KEYWORD chunkNeighbours) to contain meaningful data at this point.
-	void prepareChunk(Chunk, WorkerTaskId, Tid) { }
+	void prepareChunk(Chunk) { }
 
 	/// Do task-specific processing by chunk.
-	void processChunk(Chunk, WorkerTaskId, Tid) { }
+	void processChunk(Chunk) { }
 
 	/// Process any additional messages.
-	void processMessage(Variant v, WorkerTaskId taskId, Tid tid)
+	void processMessage(Variant v)
 	{
-		writefln("Worker thread %d received unknown message: %s", taskId, v);
+		writefln("Worker thread %d received unknown message: %s", mTaskId, v);
 	}
 
-	void cleanup(WorkerTaskId, Tid) { }
+	void cleanup() { }
+
+protected:
+	Tid mParentTid;
+	WorkerTaskId mTaskId;
+	ubyte mPass;
 }
 
 /// Find a neighbouring chunk with the supplied relative chunk co-ordinate. Returns null if no chunk found.
@@ -121,7 +126,7 @@ struct WorkerThreadToFinish { }
 	classInfo_: The typeid of the WTContext subclass managing the filter.
 	rationExtent_: The extent 
 ***/
-private void workerThread_main(WorkerTaskId taskId_, Tid parentTid_, Dimension dimension_, immutable(ClassInfo) classInfo_, Extents neighbourExtent_, Extents focusExtent_)
+private void workerThread_main(WorkerTaskId taskId_, Tid parentTid_, Dimension dimension_, immutable(ClassInfo) classInfo_, Extents neighbourExtent_, Extents focusExtent_, ubyte pass)
 {
 	try {
 		WT.taskId          = taskId_;
@@ -131,7 +136,7 @@ private void workerThread_main(WorkerTaskId taskId_, Tid parentTid_, Dimension d
 		WT.neighbourExtent = neighbourExtent_;
 		WT.focusExtent     = focusExtent_;
 
-		workerThread_main2();
+		workerThread_main2(pass);
 	}
 	catch (shared(Throwable) t) {
 		stderr.writefln("[WT%d] EXCEPTION FOUND in workerThread_main2 (%s: %s at %s:%d)", WT.taskId, typeid(t), t.msg, t.file, t.line);
@@ -179,7 +184,7 @@ private struct WT {
 /++
 	Runs the first pass of a world's ration in a worker thread. Pass 1 involves all the ration's chunks, save for the edge ones where neighbours would be in a different ration.
 +/
-private void workerThread_main2()
+private void workerThread_main2(ubyte pass)
 {
 	debug(dc13Threaded) {
 		stderr.writefln("[WT%d] Started main (WT.context object type: %s). Full extent: %s; focus extent: %s", WT.taskId, WT.classInfo, WT.neighbourExtent, WT.focusExtent);
@@ -188,6 +193,11 @@ private void workerThread_main2()
 	// try making a WTContext
 	WT.context = cast(WTContext) WT.classInfo.create();
 	assert(WT.context, "Couldn't create WTContext descendent (%s)".format(WT.classInfo));
+
+	// set member variables in WTContext object
+	WT.context.mParentTid = WT.parentTid;
+	WT.context.mTaskId    = WT.taskId;
+	WT.context.mPass      = pass;
 
 	WT.leadLagSize = (WT.neighbourExtent.width + 1) * NeighbourRadius;
 
@@ -205,7 +215,7 @@ private void workerThread_main2()
 				debug(dc13Threaded) stderr.writefln("[WT%d] Received chunk stream of %s", WT.taskId, coord);
 				try {
 					auto newChunk = new Chunk(coord, WT.dimension, stream);
-					WT.context.prepareChunk(newChunk, WT.taskId, WT.parentTid);
+					WT.context.prepareChunk(newChunk);
 					WT.laggingChunks[$-1] = newChunk;
 				}
 				catch (Exception e) {
@@ -220,7 +230,7 @@ private void workerThread_main2()
 			},
 
 			(Variant v) {
-				WT.context.processMessage(v, WT.taskId, thisTid);
+				WT.context.processMessage(v);
 			}
 			);
 
@@ -228,7 +238,7 @@ private void workerThread_main2()
 			debug(dc13Threaded) stderr.writefln("[WT%d] Processing chunk %s...", WT.taskId, WT.thisChunk.coord);
 			refillChunkNeighbours();
 			try {
-				WT.context.processChunk(WT.thisChunk, WT.taskId, thisTid);
+				WT.context.processChunk(WT.thisChunk);
 				++WT.chunksProcessed;
 			}
 			catch (Exception e) {
@@ -282,7 +292,7 @@ private void workerThread_main2()
 	foreach (chunk ; WT.laggingChunks.chain([WT.thisChunk]).filter!"a !is null"()) {
 		// process the lagging chunks that remain
 		try {
-			WT.context.processChunk(chunk, WT.taskId, thisTid);
+			WT.context.processChunk(chunk);
 			immutable(ubyte)[] chunkStream = chunk.modified ? chunk.flatten().assumeUnique() : null;
 			debug(dc13Threaded) stderr.writefln("[WT%d cleanup] Sending lagging chunk %s back to WT (modified: %s)", WT.taskId, chunk.coord, chunk.modified);
 			WT.parentTid.send(WT.taskId, chunk.coord, chunkStream);
@@ -301,7 +311,7 @@ private void workerThread_main2()
 		++WT.chunksProcessed;
 	}
 
-	WT.context.cleanup(WT.taskId, WT.parentTid);
+	WT.context.cleanup();
 
 	WT.parentTid.send(WT.taskId, WT.chunksProcessed, WT.chunksSkipped); // done
 
@@ -345,7 +355,7 @@ private final class WorkerThreadAgent
 	void spawnChild(ubyte pass, ubyte neighbourRange, Dimension d, immutable(ClassInfo) wtctxInfo, Extents focus)
 	{
 		debug(dc13Threaded) stderr.writefln("Creating worker thread %d with %s", taskId, areaRange.extents);
-		tid = spawnLinked(&workerThread_main, this.taskId, thisTid, d, wtctxInfo, areaRange.extents, focus);
+		tid = spawnLinked(&workerThread_main, this.taskId, thisTid, d, wtctxInfo, areaRange.extents, focus, pass);
 		readyForChunk = true;
 	}
 
