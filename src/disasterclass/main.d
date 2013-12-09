@@ -17,6 +17,8 @@ import disasterclass.data;
 import disasterclass.versioninfo;
 import disasterclass.threads;
 
+import disasterclass.filters.atlantis;
+
 import std.file;
 import std.stdio;
 import std.exception;
@@ -48,6 +50,7 @@ static this()
 	cmdstemp["dither"     ] = &main_dither;
 	cmdstemp["cityscape"  ] = &main_cityscape;
 	cmdstemp["australia"  ] = &main_australia;
+	cmdstemp["atlantis"   ] = &main_atlantis;
 
 	cmdstemp["querydata"] = &main_querydata;
 
@@ -77,7 +80,7 @@ class Options_t
 {
 	Dimension dimension = Dimension.Overworld;
 	string worldPath;
-	uint[string] cacheSizes;
+	uint[string] cacheSizes, metrics;
 	bool[string] itinerary;
 	uint nThreads;
 	uint rngSeed;
@@ -161,7 +164,8 @@ int main(string[] args)
 			"cachesize", &Options.cacheSizes,
 			"threads", &Options.nThreads,
 			"rng-seed", &Options.rngSeed,
-			"itinerary", &Options.itinerary
+			"itinerary", &Options.itinerary,
+			"metrics", &Options.metrics
 			);
 		//debug stderr.writefln("Args after: %s", args);
 
@@ -504,6 +508,19 @@ ExitCode main_australia(string[] args)
 	mainWorld.updateTimestamp();
 	mainWorld.name = mainWorld.name.dup.reverse.assumeUnique();
 	mainWorld.saveLevelDat("[DC: Australia]");
+
+	return ExitCode.Success;
+}
+
+ExitCode main_atlantis(string[] args)
+{
+	enum uint DefaultCeilingGap = 8;	
+	Atlantis.ceilingGap = min(Options.metrics.get("atlantis-ceiling-gap", DefaultCeilingGap), ubyte.max);
+
+	runParallelTask(mainWorld, Dimension.Overworld, typeid(Atlantis.Context), null, Options.nThreads);
+
+	mainWorld.updateTimestamp();
+	mainWorld.saveLevelDat("[DC: Atlantis]");
 
 	return ExitCode.Success;
 }
