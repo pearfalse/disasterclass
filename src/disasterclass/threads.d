@@ -56,6 +56,9 @@ package class WTContext
 	/// Per-thread setup
 	void begin(WorkerTaskId, Tid) { }
 
+	/// Called whenever a chunk is created in local memory. Do $(B not) rely on $(D_KEYWORD chunkNeighbours) to contain meaningful data at this point.
+	void prepareChunk(Chunk, WorkerTaskId, Tid) { }
+
 	/// Do task-specific processing by chunk.
 	void processChunk(Chunk, WorkerTaskId, Tid) { }
 
@@ -66,8 +69,6 @@ package class WTContext
 	}
 
 	void cleanup(WorkerTaskId, Tid) { }
-
-	/// TODO: per-CoordXYZ interface (requires dc13MultiBlock)
 }
 
 /// Find a neighbouring chunk with the supplied relative chunk co-ordinate. Returns null if no chunk found.
@@ -203,7 +204,9 @@ private void workerThread_main2()
 			(CoordXZ coord, immutable(ubyte)[] stream) {
 				debug(dc13Threaded) stderr.writefln("[WT%d] Received chunk stream of %s", WT.taskId, coord);
 				try {
-					WT.laggingChunks[$-1] = new Chunk(coord, WT.dimension, stream);
+					auto newChunk = new Chunk(coord, WT.dimension, stream);
+					WT.context.prepareChunk(newChunk, WT.taskId, WT.parentTid);
+					WT.laggingChunks[$-1] = newChunk;
 				}
 				catch (Exception e) {
 					stderr.writefln("[WT%d] Couldn't create chunk %s: %s", WT.taskId, coord, e.msg);
