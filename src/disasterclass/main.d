@@ -399,7 +399,7 @@ ExitCode main_stoneage(string[] args)
 
 	class StoneAgeContext : WTContext
 	{
-		override void begin(WorkerTaskId taskId, Tid parentTid)
+		override void begin()
 		{
 			Chunk.seedThisThread(Chunk.rngSeed);
 		}

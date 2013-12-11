@@ -54,7 +54,7 @@ private:
 package class WTContext
 {
 	/// Per-thread setup.
-	void begin(WorkerTaskId, Tid) { }
+	void begin() { }
 
 	/// Called whenever a chunk is created in local memory. Do $(B not) rely on $(D_KEYWORD chunkNeighbours) to contain meaningful data at this point.
 	void prepareChunk(Chunk) { }
@@ -206,7 +206,7 @@ private void workerThread_main2(ubyte pass)
 	WT.laggingChunks = new Chunk[WT.leadLagSize];
 
 	// set the WTContext off
-	WT.context.begin(WT.taskId, WT.parentTid);
+	WT.context.begin();
 
 	bool iteratingOverArea = true;
 	while (iteratingOverArea) {
