@@ -127,6 +127,7 @@ package final class Chunk
 
 	BlockArray!(BlockID, 16, 256, 16) blocks;
 	ChunkArray blockData, skyLight, blockLight;
+	uint[] heightMap;
 
 	Variant[void*] customData; /// Holds references to algorithm-specific data. Algorithms should use a pointer to their primary function as their key.
 
@@ -320,7 +321,7 @@ package final class Chunk
 private:
 	// Reprocessed chunk sections
 	NBTNode mEntities, mTileEntities, mTileTicks;
-	uint[] mHeightMap;
+	alias mHeightMap = heightMap;
 	// «type» mLastUpdate; TODO
 	// TerrainPopulated will remain unchanged.
 	//BiomeType[Width*Height] mBiomeData = void;
