@@ -390,25 +390,13 @@ debug ExitCode main_pokeregion(string[] args)
 ExitCode main_stoneage(string[] args)
 {
 	// a VERY BASIC stoneage interface
+	import disasterclass.filters.stoneage;
 
 	writefln("Seeding StoneAge twister with %d.", Options.rngSeed);
 	Chunk.rngSeed = Options.rngSeed;
 
 	//Chunk c = mainWorld.byRegion(Dimension.Overworld).front.byChunk.front;
 	//c.basicStoneAge();
-
-	class StoneAgeContext : WTContext
-	{
-		override void begin()
-		{
-			Chunk.seedThisThread(Chunk.rngSeed);
-		}
-
-		override void processChunk(Chunk c)
-		{
-			c.basicStoneAge();
-		}
-	}
 
 	runParallelTask(mainWorld, Dimension.Overworld, typeid(StoneAgeContext), null, Options.nThreads);
 
@@ -444,12 +432,19 @@ ExitCode main_freshen(string[] args)
 +/
 ExitCode main_dither(string[] args)
 {
-
 	class DitherContext : WTContext
 	{
-		override void processChunk(Chunk chunk)
+		override void processChunk(Chunk c)
 		{
-			chunk.dither();
+			uint count = 0;
+			foreach (ref block, ref data ; lockstep(c.blocks[], c.blockData[])) {
+				if (((count >> 8) ^ (count >> 4) ^ count) & 1) {
+					block = 0;
+					data = 0;
+				}
+				++count;
+			}
+			c.modified = true;
 		}
 	}
 
@@ -461,16 +456,38 @@ ExitCode main_dither(string[] args)
 	return ExitCode.Success;
 }
 
-/++
-	Creates a dull, barren cityscape by turning all non-air blocks into stone.
-+/
+/***
+
+Turns a world into a bland cityscape. Converts $(I all) non-air blocks (including bedrock) into plain stone.
+
+It also adds jack o'lanterns, glowstone and red wool in various places at Y=69, as an old test for finding local chunk neighbours.
+
+*/
 ExitCode main_cityscape(string[] args)
 {
 	class CityscapeContext : WTContext
 	{
-		override void processChunk(Chunk chunk)
+		override void processChunk(Chunk c)
 		{
-			chunk.cityscape();
+			auto leftEdge = c[0, 69, 15];
+			foreach (ref blk ; c.blocks[]) {
+				if (blk) blk = 1;
+			}
+			c[0, 69, 15] = leftEdge;
+			c[7, 69, 7] = BlockType.Jack_o_Lantern;
+
+
+			Chunk eastChunk = getChunkAt(1, 0);
+			if (eastChunk) {
+				c[15, 69, 15] = BlockIDAndData(BlockType.Glowstone, cast(BlockData) 0u);
+				eastChunk[0, 69, 15] = BlockIDAndData(BlockType.Soul_Sand, cast(BlockData) 0u);
+				eastChunk.modified = true;
+			}
+			else {
+				c[15, 69, 15] = BlockIDAndData(BlockType.Wool, cast(BlockData) 14u);
+			}
+
+			c.modified = true;
 		}
 	}
 
@@ -486,9 +503,31 @@ ExitCode main_australia(string[] args)
 {
 	class AustraliaContext : WTContext
 	{
-		override void processChunk(Chunk chunk)
+		override void processChunk(Chunk c)
 		{
-			chunk.australia();
+			void flip(T, uint X, uint Y, uint Z)(ref Chunk.BlockArray!(T, X, Y, Z) ba)
+			{
+				foreach (z ; 0..Z) foreach (x ; 0..X) foreach (y ; 0..Y/2) {
+					uint yrev = Y-1 - y;
+					auto t = ba[x, y, z];
+					ba[x, y, z] = ba[x, yrev, z];
+					ba[x, yrev, z] = t;
+
+					debug(none) {
+						if (c.coord == CoordXZ(0, 0) && x == (z - 1)) stderr.writefln("Swapping (%d,%d,%d) and (%d,%d,%d)", x, y, z, x, yrev, z);
+					}
+				}
+			}
+
+			flip!(BlockID, 16, 256, 16)(c.blocks);
+			flip!(ubyte, 16, 256, 16)(c.blockData);
+			flip!(ubyte, 16, 256, 16)(c.blockLight);
+
+			// apparently minecraft disagrees with this analysis -- TODO: why? [Could well be because this world type confuses Minecraft]
+			c.heightMap[] = 256u;
+			c.skyLight.array[] = 0u;
+
+			c.modified = true;
 		}
 	}
 

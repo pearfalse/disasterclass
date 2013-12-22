@@ -12,7 +12,10 @@ ifeq ($(UNAME), Linux)
 PLATFORM := Linux
 endif
 
-MODULES = versioninfo support vectors cbuffer nbt region chunk world data biomedata filters/atlantis threads main
+MODULES = versioninfo support vectors cbuffer nbt region chunk world data biomedata threads validate main
+FILTERS = stoneage atlantis
+MODULES += $(addprefix filters/,$(FILTERS))
+
 VERSION = $(shell ./version_tool)
 
 SOURCES := $(addprefix $(SRCDIR)/,$(addsuffix .d,$(MODULES)))
