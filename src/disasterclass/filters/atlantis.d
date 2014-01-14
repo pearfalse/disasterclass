@@ -14,7 +14,7 @@ Atlantis currently doesn't do any ceiling smoothing, or cross-chunk relaxation o
 
 import disasterclass.vectors;
 import disasterclass.chunk;
-import disasterclass.threads;
+import disasterclass.parallel;
 import disasterclass.data;
 
 import std.stdio;
@@ -29,12 +29,12 @@ struct Atlantis
 
 	class Context : WTContext
 	{
-		override void begin(WorkerTaskId, Tid)
+		override void begin()
 		{
 			mCeilingGap = Atlantis.ceilingGap;
 		}
 
-		override void prepareChunk(Chunk chunk, WorkerTaskId, Tid)
+		override void prepareChunk(Chunk chunk, ubyte pass)
 		{
 			auto lowest = new Chunk.BlockArray!(ubyte, Chunk.Length, 1, Chunk.Length)(); // to match XZ plane of chunk
 			// set lowest to be the maximum Y coord of any non-air block
@@ -44,7 +44,7 @@ struct Atlantis
 			chunk.customData[&Atlantis.run] = Atlantis.Data(lowest, new Atlantis.XZPlane);
 		}
 
-		override void processChunk(Chunk chunk, WorkerTaskId, Tid)
+		override void processChunk(Chunk chunk, ubyte pass)
 		{
 			Atlantis.run(chunk, mCeilingGap);
 		}

@@ -12,7 +12,7 @@ ifeq ($(UNAME), Linux)
 PLATFORM := Linux
 endif
 
-MODULES = versioninfo support vectors cbuffer nbt region chunk world data biomedata threads validate main
+MODULES = versioninfo support vectors cbuffer nbt region chunk world data biomedata parallel validate main
 FILTERS = stoneage atlantis
 MODULES += $(addprefix filters/,$(FILTERS))
 

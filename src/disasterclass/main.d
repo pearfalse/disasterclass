@@ -15,7 +15,7 @@ import disasterclass.region;
 import disasterclass.support;
 import disasterclass.data;
 import disasterclass.versioninfo;
-import disasterclass.threads;
+import disasterclass.parallel;
 
 import disasterclass.filters.atlantis;
 
@@ -239,7 +239,7 @@ ExitCode main_stats(string[] args)
 	writefln("Dimension extents (W,E,N,S): %s", mainWorld.extents(dimension));
 
 
-	struct BlockCounts { WorkerTaskId taskId; immutable(ulong)[] blockCounts; }
+	struct BlockCounts { immutable(ulong)[] blockCounts; }
 
 	// stats contexts
 	class StatsMTContext : MTContext
@@ -275,7 +275,7 @@ ExitCode main_stats(string[] args)
 	{
 		ulong[NBlockTypes] blocks;
 
-		override void processChunk(Chunk c)
+		override void processChunk(Chunk c, ubyte pass)
 		{
 			foreach (BlockID blk, BlockData data ; c) {
 				++blocks[blk];
@@ -284,7 +284,7 @@ ExitCode main_stats(string[] args)
 
 		override void cleanup()
 		{
-			mParentTid.send(BlockCounts( mTaskId, blocks[].assumeUnique() ));
+			manager.send(BlockCounts( blocks[].assumeUnique() ));
 		}
 	}
 
@@ -434,7 +434,7 @@ ExitCode main_dither(string[] args)
 {
 	class DitherContext : WTContext
 	{
-		override void processChunk(Chunk c)
+		override void processChunk(Chunk c, ubyte pass)
 		{
 			uint count = 0;
 			foreach (ref block, ref data ; lockstep(c.blocks[], c.blockData[])) {
@@ -467,7 +467,7 @@ ExitCode main_cityscape(string[] args)
 {
 	class CityscapeContext : WTContext
 	{
-		override void processChunk(Chunk c)
+		override void processChunk(Chunk c, ubyte pass)
 		{
 			auto leftEdge = c[0, 69, 15];
 			foreach (ref blk ; c.blocks[]) {
@@ -477,7 +477,7 @@ ExitCode main_cityscape(string[] args)
 			c[7, 69, 7] = BlockType.Jack_o_Lantern;
 
 
-			Chunk eastChunk = getChunkAt(1, 0);
+			Chunk eastChunk = c.neighbourAt(1, 0);
 			if (eastChunk) {
 				c[15, 69, 15] = BlockIDAndData(BlockType.Glowstone, cast(BlockData) 0u);
 				eastChunk[0, 69, 15] = BlockIDAndData(BlockType.Soul_Sand, cast(BlockData) 0u);
@@ -503,7 +503,7 @@ ExitCode main_australia(string[] args)
 {
 	class AustraliaContext : WTContext
 	{
-		override void processChunk(Chunk c)
+		override void processChunk(Chunk c, ubyte pass)
 		{
 			void flip(T, uint X, uint Y, uint Z)(ref Chunk.BlockArray!(T, X, Y, Z) ba)
 			{
@@ -573,7 +573,7 @@ void relightWorld()
 	// relight the world
 	class RelightWTContext : WTContext
 	{
-		override void processChunk(Chunk c)
+		override void processChunk(Chunk c, ubyte pass)
 		{
 			c.relight2();
 		}

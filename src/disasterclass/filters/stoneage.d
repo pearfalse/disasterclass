@@ -17,7 +17,7 @@ module disasterclass.filters.stoneage;
 +/
 
 import disasterclass.chunk;
-import disasterclass.threads;
+import disasterclass.parallel;
 import disasterclass.vectors;
 import disasterclass.data;
 import disasterclass.support;
@@ -29,7 +29,7 @@ class StoneAgeContext : WTContext
 		Chunk.seedThisThread(Chunk.rngSeed);
 	}
 
-	override void processChunk(Chunk c)
+	override void processChunk(Chunk c, ubyte pass)
 	{
 		//debug(dc13WriteChunk) stderr.writef("bsa %s", mCoord);
 

@@ -12,7 +12,6 @@ import disasterclass.nbt;
 import disasterclass.support;
 import disasterclass.world;
 import disasterclass.data;
-import disasterclass.threads : getChunkAt, chunkNeighbours;
 
 import std.datetime;
 import std.zlib;
@@ -318,6 +317,22 @@ package final class Chunk
 		}
 	}
 
+	/// Find a neighbouring chunk with the supplied relative chunk co-ordinate. Returns null if no chunk found.
+	package Chunk neighbourAt(CoordXZ relCoord)
+	{
+		CoordXZ absCoord = mCoord + relCoord;
+		if (absCoord == CoordXZ(0, 0)) return this;
+
+		auto r = chunkNeighbours.find!((a, b) => a !is null && a.mCoord == b)(absCoord);
+		return r.empty ? null : r.front;
+	}
+
+	/// ditto
+	package Chunk neighbourAt(int x, int z)
+	{
+		return this.neighbourAt(CoordXZ(x, z));
+	}
+
 private:
 	// Reprocessed chunk sections
 	NBTNode mEntities, mTileEntities, mTileTicks;
@@ -543,6 +558,8 @@ unittest
 {
 	CoordXZ a = CoordXZ(-33, -2), b = CoordXZ(-1, -2);
 }
+
+package Chunk[] chunkNeighbours;
 
 /** Holds data about neighbouring chunks. This helper struct allows fast getting and setting of custom properties of a chunk or its local neighbours, without having to bake the index arithmetic and conditional ignoring into the user code.
 
