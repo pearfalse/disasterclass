@@ -58,8 +58,7 @@ struct CoordXZ
 	/++
 		Unary positation.
 	+/
-	CoordXZ opUnary(string op)() const
-	if (op == "+")
+	CoordXZ opUnary(string op : "+")() const
 	{
 		return this;
 	}
@@ -67,8 +66,7 @@ struct CoordXZ
 	/++
 		Unary negation.
 	+/
-	CoordXZ opUnary(string op)() const
-	if (op == "-")
+	CoordXZ opUnary(string op : "-")() const
 	{
 		return CoordXZ(-x, -z);
 	}
@@ -164,8 +162,7 @@ struct CoordXYZ
 	/++
 		Unary positation.
 	+/
-	CoordXYZ opUnary(string op)() const
-	if (op == "+")
+	CoordXYZ opUnary(string op : "+")() const
 	{
 		return this;
 	}
@@ -173,8 +170,7 @@ struct CoordXYZ
 	/++
 		Unary negation.
 	+/
-	CoordXYZ opUnary(string op)() const
-	if (op == "-")
+	CoordXYZ opUnary(string op : "-")() const
 	{
 		return CoordXYZ(-x, -y, -z);
 	}
@@ -238,17 +234,28 @@ struct CoordXYZ
 */
 struct Extents
 {
-	Tuple!(int, "west", int, "east", int, "north", int, "south") _tupleElements;
-	alias _tupleElements this;
+	int west, east, north, south;
 
-	/** Creates a new $(D_KEYWORD Extents) from four distinct points.
-
-	The parameter order of this constructor is considered to be $(I really stupid), and will change in a future version.
-	**/
+	/// Constructor from four co-ordinates.
 	this(int w, int e, int n, int s)
 	{
-		west = w; east = e;
-		north = n; south = s;
+		this.west  = w;
+		this.east  = e;
+		this.north = n;
+		this.south = s;
+	}
+
+	/// Constructor from a north-west and south-east co-ordinate pair.
+	this(CoordXZ nw, CoordXZ se)
+	{
+		north = nw.z; west = nw.x;
+		south = se.z; east = se.x;
+	}
+
+	/// Constructor-style static function returning an $(D_KEYWORD Extents) from a north-east and south-west co-ordinate pair.
+	static Extents fromNESW(CoordXZ ne, CoordXZ sw)
+	{
+		return Extents(sw.x, ne.x, ne.z, sw.z);
 	}
 
 	/// Create and return a $(D_KEYWORD CoordXZ) representing the four corners of the extents.
@@ -333,6 +340,14 @@ struct Extents
 			}
 		}
 
+		@property Range save()
+		{
+			typeof(return) r = void;
+			r.ex = this.ex;
+			r.xz = this.xz;
+			return r;
+		}
+
 		unittest
 		{
 			auto r = Extents(0, 3, 10, 12)[];
@@ -352,6 +367,15 @@ struct Extents
 			assert(r.empty);
 		}
 
+		unittest {
+			auto e = Extents(0, 10, -5, 5);
+			auto r = e[];
+			r.popFront();
+			auto s = r.save;
+			assert(s.extents == r.extents);
+			assert(s.front == e.northWest + CoordXZ(1, 0));
+		}
+
 	private:
 		Extents ex;
 		CoordXZ xz;
@@ -369,5 +393,25 @@ struct Extents
 		CoordXZ in Extents
 		CoordXZ !in Extents
 		*/
+
+		Extents a = Extents(0, 9, 2, 4); // ctor
+		Extents b = a; // copy ctor
+		assert(b == a);
+		b.south = -1;
+		b = a; //assignment ctor
+		assert(b == a);
+
+		Extents c = Extents(CoordXZ(0, 1), CoordXZ(10, 11));
+		assert(c == Extents(0, 10, 1, 11));
+	}
+
+	unittest
+	{
+		int w = -10, e = 10, n = -5, s = 5;
+		Extents e1 = Extents(w, e, n, s), e2 = Extents(CoordXZ(w, n), CoordXZ(e, s));
+		assert(e1 == e2);
 	}
 }
+
+private import std.range : isForwardRange;
+static assert(isForwardRange!(Extents.Range));
