@@ -125,11 +125,12 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 			• world width >= d
 			• number of rationing strips <= floor(world width / d)
 	*/
-	enum uint NeighbourDiameter = 2 * NeighbourRadius + 1;
-	if (worldExtent.width < NeighbourDiameter) {
+	enum uint NeighbourDiameter = 2 * NeighbourRadius + 1,
+	MinWorldWidth = NeighbourRadius * 4;
+	if (worldExtent.width < MinWorldWidth + 1) {
 		// world is too small to split
 		nSplits = 1;
-		debug(dc13Threads3) stderr.writefln("World too small to split -- using one region");
+		throw new Exception("World too small to split (must be at least %d chunks wide) -- currently cannot be processed with Disasterclass".format(MinWorldWidth));
 	}
 	else {
 		nSplits = min(
