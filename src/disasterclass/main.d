@@ -236,7 +236,7 @@ ExitCode main_stats(string[] args)
 
 	writefln("Examining the %s dimension of \"%s\" at %s.", dimension, mainWorld.name, Options.worldPath);
 	writefln("Region contains %d chunks total.", mainWorld.numberOfChunks(dimension));
-	writefln("Dimension extents (W,E,N,S): %s", mainWorld.extents(dimension));
+	writefln("Dimension extents: %s", mainWorld.extents(dimension));
 
 
 	struct BlockCounts { immutable(ulong)[] blockCounts; }
@@ -328,7 +328,7 @@ ExitCode main_stats(string[] args)
 /++
 	Essentially, a command-line interface to $(D_CODE Region.findGapToWriteChunk). Not a lot of use if that function stays bug-free.
 +/
-debug ExitCode main_pokeregion(string[] args)
+deprecated debug ExitCode main_pokeregion(string[] args)
 {
 	writeln(
 		"<pokeregion> For testing purposes only. Doesn't support Nether or End.\n"
