@@ -39,6 +39,9 @@ protected:
 		throw new Exception("Manager thread received unknown message: " ~ v.type().toString());
 	}
 
+	/// Called when worker threads are finished.
+	void cleanup() { }
+
 	final void broadcast(Args...)(Args a)
 	{
 		foreach (tid ; mWorkerTids) {
@@ -145,16 +148,19 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 	.map!((s) => s / cast(real) (nSplits) * worldExtent.width)()
 	.map!((a) => cast(int) (a) + worldExtent.west)()
 	.array();
+	debug(dc13Threads3) stderr.writefln("[MT] Boundaries: %s", boundaries);
 	assert(boundaries.length == nSplits + 1);
 
 	// convert boundaries into pass1 Rations
 	auto pass1Rations = iota(nSplits)
 	.map!((i) => Extents(boundaries[i], boundaries[i+1], worldExtent.north, worldExtent.south))().array();
+	debug(dc13Threads3) stderr.writefln("[MT] Pass 1 Rations: %s", pass1Rations);
 	auto pass1FocusRations = pass1Rations.dup;
 
 	// shrink original Rations west/east to make focus Rations
 	foreach (ref ex ; pass1FocusRations[1..$]) ex.west += NeighbourRadius;
 	foreach (ref ex ; pass1FocusRations[0..($-1)]) ex.east -= NeighbourRadius;
+	debug(dc13Threads3) stderr.writefln("[MT] Pass 1 Focus Rations: %s", pass1FocusRations);
 
 	// pass2 rations just extend out from inner boundaries
 	auto pass2FocusRations = boundaries[1..($-1)]
@@ -164,6 +170,7 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 		ex.west -= NeighbourRadius;
 		ex.east += NeighbourRadius;
 	}
+	debug(dc13Threads3) stderr.writefln("[MT] Pass 2 Focus Rations: %s", pass2FocusRations);
 
 	// array length sanity checks
 	assert(pass1Rations.length == pass1FocusRations.length);
@@ -178,22 +185,29 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 		// mutated upon workload change
 		Tid tid;
 		ubyte pass;
-		ubyte threadId;
+		ubyte threadId = ubyte.max;
 
 		// mutated during mainloop
-		bool wantsAnotherChunk = true;
-		Nullable!(Extents.Range) areaRange;
+		bool wantsAnotherChunk = false;
+		Extents.Range areaRange;
 
 		this(Extents ration_, Extents focus_, ubyte pass_)
 		{
 			ration = ration_; focus = focus_; pass = pass_;
+			areaRange = ration[];
 		}
 
-		void init()
+		final void init()
 		{
 			assert(tid != Tid.init);
 			tid.send(RationsInfoMsg(ration, focus, pass));
+			//wantsAnotherChunk = true;
 		}
+
+		//auto _initRange()
+		//{
+		//	return ration[].filter!(c => world.hasChunkAt(c, dimension))();
+		//}
 
 		@property final bool active()
 		{
@@ -216,7 +230,8 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 		}
 
 		invariant() {
-			assert((depWest is null) == (depEast is null));
+			assert((depWest is null) == (depEast is null)); // 0 or 2 null values -- nothing else
+			assert((depWest is null && depEast is null) || (depWest != depEast)); // they shouldn't equal each other either
 			assert(pass == 2);
 		}
 	}
@@ -242,44 +257,30 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 
 	Tid[] workerThreads = new Tid[nThreads];
 	foreach (i, ref t ; workerThreads) {
-		t = spawn(&WT.launch, thisTid, cast(immutable ClassInfo)(wtContextInfo), dimension, cast(ubyte)(i+1));
+		debug(dc13Threads3) stderr.writefln("[MT] Spawning worker thread %d", i);
+		t = spawn(&WT.launch, thisTid, cast(immutable ClassInfo)(wtContextInfo), dimension, cast(ubyte) i);
+		setMaxMailboxSize(t, 12/* a guess, but should be enough */, OnCrowding.block);
 	}
 	if (ctx) ctx.mWorkerTids = workerThreads; // let MTContext see these, for MTContext.broadcast
 
 	// we'll need these
 
-	bool done = false;
-
+	//bool done = false;
 	ulong cycleCount = 0, chunksProcessed = 0, chunksSkipped = 0;
+
+	setMaxMailboxSize(thisTid, 12/* hackish */, OnCrowding.block);
+
+	if (ctx) ctx.begin();
 
 	for (; !(pass1Agents.empty && pass2Agents.empty && activeAgents.all!"a is null"()); ++cycleCount) {
 
-		// send chunks to any WT that's requesting them
-		LoopActiveAgents: foreach (agent ; activeAgents.filter!(a => a !is null && a.wantsAnotherChunk)()) {
-			immutable(ubyte)[] chunkStream = null;
-			// emulate std.algorithm.filter in looping on missing chunks
-			while (!agent.areaRange.empty) {
-				CoordXZ chunkCoord = agent.areaRange.front;
-				chunkStream = ctx.world.loadChunkNBT(chunkCoord, dimension).assumeUnique();
-				if (chunkStream is null) {
-					agent.areaRange.popFront();
-					continue;
-				}
-
-				debug(dc13Threads3) stderr.writefln("[MT] Sending chunk %s to WT%d", chunkCoord, threadId);
-				agent.tid.send(ChunkCheckoutMsg(chunkCoord, chunkStream));
-				agent.wantsAnotherChunk = false;
-				agent.areaRange.popFront();
-				continue LoopActiveAgents;
-			}
-
-			// what if the area range is now empty?
-			agent.tid.send(ChunkStreamDoneMsg());
-			agent.wantsAnotherChunk = false;
-		}
-
 		// replace null workloads with new ones, if we can
-		LNewTask: foreach (ref agent ; activeAgents.filter!"a is null"()) {
+		//debug(dc13Threads3) stderr.writefln("[MT] Trace: LNewTask");
+		LNewTask: foreach (i, ref agent ; activeAgents) {
+			if (agent !is null) continue;
+
+			debug(dc13Threads3) stderr.writefln("[WT] WT%d agent gap potentials: %d pass1, %d pass2", i, count!"a !is null"(pass1Agents), count!"a !is null"(pass2Agents));
+
 			if (pass2Agents.empty) goto Lpass1;
 			// try and pull the latest from pass2
 			RationAgentPass2 p2f = pass2Agents.front;
@@ -289,9 +290,13 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 			// we should only continue if both W/E pass1 deps are proven completed
 			if (depWestLoc == -1 || depEastLoc == -1) goto Lpass1;
 
+			debug(dc13Threads3) stderr.writefln("[MT] Pulling front pass2 agent into active pool: WT%d ration = %s", i, p2f.ration);
 			agent = p2f;
+			agent.threadId = cast(ubyte) i;
+			agent.tid = workerThreads[i];
 			agent.init();
 			pass2Agents.popFront();
+			debug(dc13Threads3) stderr.writefln("[MT] Found pass2's dependents at positions %d and %d; removing from pass1CompletedAgents", depWestLoc, depEastLoc);
 			pass1CompletedAgents[depWestLoc] = null;
 			pass1CompletedAgents[depEastLoc] = null;
 			continue LNewTask;
@@ -299,29 +304,69 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 			Lpass1:
 			if (pass1Agents.empty) continue LNewTask;
 			agent = pass1Agents.front;
+			debug(dc13Threads3) stderr.writefln("[MT] Pulling front pass1 agent into active pool: WT%d ration = %s", i, agent.ration);
+			agent.tid = workerThreads[i];
+			agent.threadId = cast(ubyte) i;
 			agent.init();
 			pass1Agents.popFront();
 		}
 
+		// send chunks to any WT that's requesting them
+		//debug(dc13Threads3) stderr.writefln("[MT] Trace: LoopActiveAgents");
+		LoopActiveAgents: foreach (agent ; activeAgents.filter!(a => a !is null && a.wantsAnotherChunk)()) {
+			immutable(ubyte)[] chunkStream = null;
+			debug(dc13Threads3) stderr.writefln("[MT] WT%d wants another chunk", agent.threadId);
+			// emulate std.algorithm.filter in looping on missing chunks
+			while (!agent.areaRange.empty) {
+				CoordXZ chunkCoord = agent.areaRange.front;
+				chunkStream = ctx.world.loadChunkNBT(chunkCoord, dimension).assumeUnique();
+				if (chunkStream is null) {
+					agent.areaRange.popFront();
+					continue;
+				}
+
+				debug(dc13Threads3) stderr.writefln("[MT] Sending chunk %s to WT%d", chunkCoord, agent.threadId);
+				agent.tid.send(ChunkCheckoutMsg(chunkCoord, chunkStream));
+				agent.wantsAnotherChunk = false;
+				agent.areaRange.popFront();
+				continue LoopActiveAgents;
+			}
+
+			// what if the area range is now empty?
+			debug(dc13Threads3) stderr.writefln("[MT] Telling WT%d its stream is done", agent.threadId);
+			agent.tid.send(ChunkStreamDoneMsg());
+			agent.wantsAnotherChunk = false;
+		}
+
 		// receive any messages from WTs
+		//debug(dc13Threads3) stderr.writefln("[MT] Trace: receive");
 		receive(
 			(ChunkRequestMsg _) {
 				activeAgents[_.workerThreadId].wantsAnotherChunk = true;
 			},
 
 			(ChunkCheckinMsg _) {
-				debug (dc13Threads3) stderr.writefln("[MT] Chunk %s returned from WT%d (modified: %s)", _.chunkCoord, workerThreadId, chunkStream !is null);
-				if (_.chunkStream) ctx.world.saveChunkNBT(_.chunkCoord, _.chunkStream, dimension);
+				debug (dc13Threads3) stderr.writefln("[MT] Chunk %s returned from WT%d (modified: %s)", _.coord, _.workerThreadId, _.stream !is null);
+				if (_.stream) ctx.world.saveChunkNBT(_.coord, _.stream, dimension);
+				auto agent = activeAgents[_.workerThreadId];
+				agent.wantsAnotherChunk = _.requestNextChunk;
 			},
 
-			(WTDoneMsg _) {
+			(WTWorkloadCompleteMsg _) {
+				debug(dc13Threads3) stderr.writefln("[MT] WT%d has done current workload; processed %d, skipped %d", _.workerThreadId, _.chunksProcessed, _.chunksSkipped);
 				auto agent = activeAgents[_.workerThreadId];
 				chunksProcessed += _.chunksProcessed;
 				chunksSkipped   += _.chunksSkipped;
 
-				// move this agent to the holding pen for its pass2 children to track
-				pass1CompletedAgents.find!"a is null"().front = agent;
+				// if pass 1, move this agent to the holding pen for its pass2 children to track
+				if (agent.pass == 1) pass1CompletedAgents.find!"a is null"().front = agent;
 				activeAgents[_.workerThreadId] = null;
+				debug(dc13Threads3) stderr.writefln("[MT] WT%d agent removed from activeAgents; leaves %d gap(s)", _.workerThreadId, activeAgents.count!"a is null"());
+			},
+
+			(shared(Throwable) e) {
+				debug stderr.writefln("Found %s in worker thread -- throwing...", typeid(e));
+				throw e;
 			},
 
 			(Variant v) {
@@ -329,9 +374,38 @@ Tuple!(ulong, "processed", ulong, "skipped") runParallelTask
 			}
 		);
 
+		debug(dc13Threads3) stderr.writefln("[MT] Remaining in pass1CompletedAgents: %s", zip(iota(pass1CompletedAgents.length), pass1CompletedAgents).filter!(p => p[1] !is null)().map!(p => "%s at pos %d".format(p[1].areaRange.extents, p[0]))().join(", "));
+
 		// that's the loop done
 	}
 
+	//assert(chain(pass1Agents, cast(RationAgent[]) pass2Agents, activeAgents, pass1CompletedAgents).all!"a is null"(), "There are stray agents");
+	assert(pass1Agents.all!"a is null"(), "There are stray agents in pass1Agents");
+	assert((cast(RationAgent[]) pass2Agents).all!"a is null"(), "There are stray agents in pass2Agents");
+	assert(activeAgents.all!"a is null"(), "There are stray agents in activeAgents");
+	assert(pass1CompletedAgents.all!"a is null"(), "There are stray agents in pass1CompletedAgents");
+
+
+	if (ctx) ctx.cleanup();
+
+	// let all WTs know they are to end gracefully
+	foreach (tid ; workerThreads) tid.send(NoMoreRationsMsg());
+
+	// wait until we know all worker threads are done
+	do {
+		receive(
+			(WTDoneMsg _) {
+				workerThreads[_.workerThreadId] = Tid.init;
+				debug(dc13Threads3) stderr.writefln("[MT] WT%d confirms it's ready to shut down", _.workerThreadId);
+			},
+
+			(Variant v) {
+				if (ctx) ctx.processMessage(v);
+			}
+		);
+	} while (any!(tid => tid != Tid.init)(workerThreads));
+
+	writefln("Task complete (%d chunks processed, %d skipped)", chunksProcessed, chunksSkipped);
 	return typeof(return)(chunksProcessed, chunksSkipped);
 }
 
@@ -355,13 +429,16 @@ private {
 	// WT → MT
 	/// Chunk sent to the MT to be saved back into the region.
 	struct ChunkCheckinMsg
-	{ ubyte workerThreadId; CoordXZ chunkCoord; immutable(ubyte)[] chunkStream; }
+	{ ubyte workerThreadId; CoordXZ coord; immutable(ubyte)[] stream; bool requestNextChunk; }
 	/// Signal that the WT wants another chunk
 	struct ChunkRequestMsg
 	{ ubyte workerThreadId; }
-	/// Signals that the WT is ostensibly finished.
-	struct WTDoneMsg
+	/// Signals that the WT has ostensibly finished this workload.
+	struct WTWorkloadCompleteMsg
 	{ ubyte workerThreadId; ulong chunksProcessed; ulong chunksSkipped; }
+	/// Signals that the worker thread has completed all its rations, and the WTContext object has finished its cleanup.
+	struct WTDoneMsg
+	{ ubyte workerThreadId; }
 }
 
 
@@ -392,6 +469,7 @@ private struct WT
 	size_t leadLagSize; /// In the N–S, E–W linear iteration, how much total bufferage (with thisChunk in the middle) is needed each side to guarantee that a 1-chunk border remains loaded?
 	ubyte pass; /// Pass number of this workload (1 or 2)
 	debug uint rationsProcessed; /// Track number of rations processed -- 
+	bool chunkStreamEmpty = false;
 
 	Tuple!(size_t, "centreIndex", size_t, "deltaIndexShift") neighbourMetrics;
 
@@ -416,44 +494,63 @@ private struct WT
 	{
 		bool done = false;
 
-		while (!done) try {
-			receive(
+		try {
+			context = cast(WTContext) classInfo.create();
 
-				(RationsInfoMsg _) {
-					ration = _.ration;
-					focus  = _.focus ;
-					pass   = _.pass  ;
-					context = cast(WTContext) classInfo.create();
-					assert(context);
+			while (!done) {
+				receive(
 
-					try { this.main(); }
+					(RationsInfoMsg _) {
+						debug(dc13Threads3) stderr.writefln("[WT%d] Received pass%d workload: ration %s, focus %s", workerThreadId, _.pass, _.ration, _.focus);
+						ration = _.ration;
+						focus  = _.focus ;
+						pass   = _.pass  ;
+						assert(context);
 
-					catch (shared(Exception) t) {
-						debug(dc13Threads3) stderr.writefln("[WT%d] Found %s in WT.main (%s:%d -- %s", workerThreadId, typeid(t), t.file, t.line, t.msg);
-						parentTid.prioritySend(t);
+						chunkNeighbours = new Chunk[4 * NeighbourRadius * (NeighbourRadius + 1) + 1];
+						neighbourMetrics.centreIndex = 2 * NeighbourRadius * (NeighbourRadius + 1);
+						neighbourMetrics.deltaIndexShift = NeighbourRadius * (neighbourMetrics.centreIndex + 1);
+						debug(dc13Threads3) stderr.writefln("[WT%d] Neighbour metrics: %s", workerThreadId, neighbourMetrics);
+
+						debug(dc13Threads3) stderr.writefln("[WT%d] Leaving lobby, moving to main.", workerThreadId);
+						this.main();
+
+						// neutralise data variables
+						ration = Extents.init;
+						focus  = Extents.init;
+						chunkStreamEmpty = false;
+						state = State.Inactive;
+						neighbourMetrics.centreIndex = 0; neighbourMetrics.deltaIndexShift = 0;
+						leadLagSize = 0; pass = 0;
+						cycleCount = 0; chunksProcessed = 0; chunksSkipped = 0;
+
+						assert(leadingChunks.all!"a is null"(), "non-null Chunk refs in leadingChunks");
+						assert(laggingChunks.all!"a is null"(), "non-null Chunk refs in laggingChunks");
+						assert(thisChunk is null, "thisChunk is not null");
+						// fall through to lobby loop
+					},
+					(NoMoreRationsMsg _) {
+						done = true;
 					}
+				);
 
-					// neutralise data variables
-					ration = Extents(0, 0, 0, 0);
-					focus  = Extents(0, 0, 0, 0);
-					leadLagSize = 0; pass = 0;
-					cycleCount = 0; chunksProcessed = 0; chunksSkipped = 0;
+			}
 
-					assert(leadingChunks.all!"a is null"(), "non-null Chunk refs in leadingChunks");
-					assert(laggingChunks.all!"a is null"(), "non-null Chunk refs in laggingChunks");
-					assert(thisChunk is null, "thisChunk is not null");
-					// fall through to lobby loop
-				},
-				(NoMoreRationsMsg _) {
-					done = true;
-				}
-			);
+			context.cleanup();
+			parentTid.send(WTDoneMsg(workerThreadId));
 		}
 
 		catch (OwnerTerminated) {
 			debug(dc13Threads3) stderr.writefln("OwnedTerminated -- exiting in a calm and orderly manner");
 			done = true;
 		}
+
+		catch (shared(Throwable) t) {
+			debug(dc13Threads3) stderr.writefln("[WT%d] Caught %s in lobby: %s, %s:%d", workerThreadId, typeid(t), t.msg, t.file, t.line);
+			parentTid.prioritySend(t);
+			done = true;
+		}
+
 	}
 
 	/// "Main" function for worker threads.
@@ -461,34 +558,45 @@ private struct WT
 	{
 		assert(state == State.Inactive);
 		scope(exit) state = State.Inactive;
+		debug(dc13Threads3) scope(failure) stderr.writefln("[WT%d] Aborting on cycle count %d in state %s", workerThreadId, cycleCount, state);
 
 		// set lead-lag size
-		leadLagSize = (ration.width + 1) * NeighbourRadius;
+		leadLagSize = (ration.width ) * NeighbourRadius;
 
 		leadingChunks.length = leadLagSize;
 		laggingChunks.length = leadLagSize;
 
 		context.begin();
 
-		bool chunkStreamEmpty = false;
-
 		// state 1: filling LGC as much as possible
 		state = State.Warming;
-		auto lgcWarmingRange = chain(only(thisChunk), laggingChunks);
+		auto lgcWarmingRange = laggingChunks;
+
+		parentTid.send(ChunkRequestMsg(workerThreadId));
+
 		while (state == State.Warming) {
+			debug(dc13Threads3) stderr.writefln("[WT%d] Calling state 1 receive:", workerThreadId);
 			receive(
 				(ChunkCheckoutMsg _) {
 					assert(!lgcWarmingRange.empty);
 					assert(lgcWarmingRange.front is null);
-					debug(dc13Threads3) stderr.writefln("[WT%d] Got chunk %s", workerThreadId, _.chunkCoord);
+					debug(dc13Threads3) stderr.writefln("[WT%d] Got chunk %s", workerThreadId, _.coord);
 					try {
 						auto newChunk = new Chunk(_.coord, dimension, _.stream);
 						context.prepareChunk(newChunk, pass);
-						(thisChunk is null ? thisChunk : laggingChunks[0]) = newChunk;
+						if (thisChunk is null) {
+							debug(dc13Threads3) stderr.writefln("[WT%d] Setting thisChunk in state 1", workerThreadId);
+							thisChunk = newChunk;
+						}
+						else {
+							lgcWarmingRange.front = newChunk;
+							lgcWarmingRange.popFront();
+						}
 
-						lgcWarmingRange.popFront();
 						if (lgcWarmingRange.empty) state = State.Active;
 						else parentTid.send(ChunkRequestMsg(workerThreadId));
+
+						debug(dc13Threads3) printChunkLineState();
 					}
 					catch (Exception e) {
 						stderr.writefln("[WT%d] Couldn't create chunk %s: %s", workerThreadId, _.coord, e.msg);
@@ -497,8 +605,13 @@ private struct WT
 				},
 
 				(ChunkStreamDoneMsg _) {
+					debug(dc13Threads3) stderr.writefln("[WT%d] MT agent's chunk stream is done", workerThreadId);
 					chunkStreamEmpty = true;
 					state = State.Active;
+				},
+
+				(OwnerTerminated e) {
+					throw e;
 				},
 
 				(Variant v) { context.processMessage(v); }
@@ -507,13 +620,23 @@ private struct WT
 			++cycleCount;
 		}
 
+		debug(dc13Threads3) {
+			stderr.writefln("[WT%d] Moving to state 2", workerThreadId);
+		}
+
 		// state 2: processing chunks
 		assert(state == State.Active);
 		
 		while (state == State.Active) {
-			assert(thisChunk !is null);
-			try {
+			debug(dc13Threads3) {
+				scope(failure) printChunkLineState();
+				assert(thisChunk !is null);
+			}
+
+			if (thisChunk.coord in focus) try {
 				scope(failure) thisChunk.modified = false; // if processChunk throws an exception, don't save the chunk back to the region
+				//debug(dc13Threads3) stderr.writefln("[WT%d] About to process chunk %s", workerThreadId, thisChunk.coord);
+				//debug(dc13Threads3) scope(success) stderr.writefln("[WT%d] Successfully processed chunk %s", workerThreadId, thisChunk.coord);
 				context.processChunk(thisChunk, pass);
 				++chunksProcessed;
 			}
@@ -524,10 +647,11 @@ private struct WT
 
 			shiftChunks();
 
+			debug(dc13Threads3) if (!chunkStreamEmpty) stderr.writefln("[WT%d] Chunk stream not empty; will call receive", workerThreadId);
 			if (!chunkStreamEmpty) receive(
 				// put another chunk in the new trailing null
 				(ChunkCheckoutMsg _) {
-					debug(dc13Threads3) stderr.writefln("[WT%d] Got chunk %s", workerThreadId, _.chunkCoord);
+					debug(dc13Threads3) stderr.writefln("[WT%d] Got chunk %s", workerThreadId, _.coord);
 					try {
 						assert(laggingChunks[$-1] is null);
 						auto newChunk = new Chunk(_.coord, dimension, _.stream);
@@ -550,40 +674,45 @@ private struct WT
 				// no more chunks to receive or process
 				assert(chunkStreamEmpty);
 				state = State.Flushing;
+				debug(dc13Threads3) stderr.writefln("[WT%d] State set to %s", workerThreadId, state);
 			}
 
 			++cycleCount;
 		}
 
 		// state 3: flushing
+		assert(state == State.Flushing);
 		assert(leadingChunks.find!"a !is null"().all!"a !is null"()); // the only nulls in LDC should all be bunched at the start of the array. No nulls in the stream.
 		assert(laggingChunks.all!"a is null"());
 		foreach (ref chunk ; leadingChunks.find!"a !is null"()) {
+			debug(dc13Threads3) stderr.writefln("[WT%d] Sending back chunk %s from state 3", workerThreadId, chunk.coord);
 			returnChunk(chunk);
 			chunk = null;
 		}
 
-		parentTid.send(WTDoneMsg(workerThreadId, chunksProcessed, chunksSkipped));
+		parentTid.send(WTWorkloadCompleteMsg(workerThreadId, chunksProcessed, chunksSkipped));
 	}
 
 	void shiftChunks()
 	{
+		debug(dc13Threads3) {
+			//stderr.writefln("[WT%d] Trace: WT.shiftChunks", workerThreadId);
+			scope(success) stderr.writefln("[WT%d] New central chunk: %s", workerThreadId, thisChunk is null ? "(null)" : thisChunk.coord.toString());
+		}
 		// push outgoing chunk
 		auto outgoingChunk = leadingChunks[0];
 		if (outgoingChunk) returnChunk(outgoingChunk);
+		else if (!chunkStreamEmpty) parentTid.send(ChunkRequestMsg(workerThreadId));
 
 		// shift leading/lagging
 		copy( leadingChunks[1..$], leadingChunks[0..($-1)] );
 		leadingChunks[$-1] = thisChunk;
 		thisChunk = laggingChunks[0];
-		copy( laggingChunks[1..$], leadingChunks[0..($-1)] );
+		copy( laggingChunks[1..$], laggingChunks[0..($-1)] );
 		laggingChunks[$-1] = null;
 
 		// create neighbourhood
-		assert(thisChunk);
-		// these should be calculated in the lobby
-		neighbourMetrics.centreIndex = 2 * NeighbourRadius * (NeighbourRadius + 1);
-		neighbourMetrics.deltaIndexShift = NeighbourRadius * (neighbourMetrics.centreIndex + 1);
+		if (thisChunk is null) return;
 
 		auto
 		neighboursNW = chunkNeighbours[0 .. neighbourMetrics.centreIndex],
@@ -614,9 +743,10 @@ private struct WT
 			if (chunk.modified) stream = chunk.flatten().assumeUnique();
 		}
 		catch (Exception e) {
-			debug(dc13Threads3) stderr.writefln("[WT%d] %s thrown when processing chunk %s: %s", workerThreadId, typeid(e), thisChunk.coord, e.msg);
+			debug(dc13Threads3) stderr.writefln("[WT%d] %s thrown when flattening chunk %s: %s", workerThreadId, typeid(e), thisChunk.coord, e.msg);
 		}
-		parentTid.send(ChunkCheckinMsg(workerThreadId, chunk.coord, stream));
+		debug(dc13Threads3) stderr.writefln("[WT%d] Sending chunk %s back to MT from state %d", workerThreadId, chunk.coord, state);
+		parentTid.send(ChunkCheckinMsg(workerThreadId, chunk.coord, stream, !chunkStreamEmpty));
 	}
 
 	/// Spawned threads start here.
@@ -624,6 +754,12 @@ private struct WT
 	{
 		thisWT = new WT(parentTid_, rebindable(classInfo_), dimension_, workerThreadId_, State.Inactive);
 		thisWT.workerLobby();
+	}
+
+	// Helps with debugging
+	debug void printChunkLineState()
+	{
+		stderr.writefln("[WT%d] LDC/TC/LGC:\n%s %s %s", workerThreadId, leadingChunks.map!q{a is null ? "." : "*"}().join(""), thisChunk is null ? "." : "*", laggingChunks.map!q{a is null ? "." : "*"}().join(""));
 	}
 
 }
