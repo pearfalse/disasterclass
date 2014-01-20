@@ -125,9 +125,7 @@ class World
 	}
 
 	/***
-		Returns the $(D_KEYWORD Region) for a given $(D_KEYWORD CoordXZ) and $(Dimension).
-
-		Throws: $(D_KEYWORD DisasterclassException) if no region exists.
+		Returns the $(D_KEYWORD Region) for a given $(D_KEYWORD CoordXZ) and $(Dimension), or $(D_KEYWORD null) if no region exists.
 	*/
 	Region regionForChunk(CoordXZ chunkCoord, Dimension dimension)
 	in {
@@ -143,6 +141,15 @@ class World
 		//enforce(r, "No defined region for chunk %s".format(chunkCoord));
 		//debug stderr.writefln("Chunk at coord %s found in region %s.".format(chunkCoord, r ? r.id.to!string() : "[none]"));
 		return r;
+	}
+
+	/// Returns true iff this world has a chunk in the given dimension at the given co-ordinates.
+	bool hasChunkAt(CoordXZ chunkCoord, Dimension dimension)
+	{
+		auto r = this.regionForChunk(chunkCoord, dimension);
+		if (r is null) return false;
+
+		return r.hasChunkAt(chunkCoord.regionSubCoord);
 	}
 
 	/// Loads a chunk's NBT from the requisite region file. Returns a null array if the chunk does not exist.
