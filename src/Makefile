@@ -38,12 +38,13 @@ all: cma_debug cma_release
 
 cma_debug: version_tool $(OBJECTS_DEBUG)
 	# $(shell mkdir $(APPDIR_DEBUG)/$(VERSION))
-	$(DMD) -of$(APPDIR_DEBUG)/Disasterclass $(ARCHFLAG_DEBUG) $(LINKFLAGS_DEBUG) $(OBJECTS_DEBUG)
+	$(DMD) -of$(APPDIR_DEBUG)/Disasterclass-debug $(ARCHFLAG_DEBUG) $(LINKFLAGS_DEBUG) $(OBJECTS_DEBUG)
 
 cma_release: itemdata version_tool
 	$(shell mkdir $(APPDIR_RELEASE)/$(VERSION))
-	$(DMD) -of$(APPDIR_RELEASE)/$(VERSION)/Disasterclass $(ARCHFLAG) $(COMPILEFLAGS) $(COMPILEFLAGS_RELEASE) $(SOURCES)
-	rm $(APPDIR_RELEASE)/$(VERSION)/Disasterclass*.o # the version numbers confuse dmd/gcc, and this .o file is misnamed
+	$(DMD) -of$(OBJDIR_RELEASE)/Disasterclass.o $(ARCHFLAG) $(COMPILEFLAGS) $(COMPILEFLAGS_RELEASE) -c $(SOURCES)
+	$(DMD) -of$(APPDIR_RELEASE)/$(VERSION)/Disasterclass $(ARCHFLAG) $(COMPILEFLAGS) $(COMPILEFLAGS_RELEASE) $(OBJDIR_RELEASE)/Disasterclass.o
+	#rm $(APPDIR_RELEASE)/$(VERSION)/Disasterclass*.o
 
 $(OBJDIR_DEBUG)/%.o: $(SRCDIR)/%.d
 	$(DMD) -of$@ -I$(LIBDIR) $(COMPILEFLAGS) $(COMPILEFLAGS_DEBUG) -c $<
