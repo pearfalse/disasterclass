@@ -559,6 +559,12 @@ unittest
 	CoordXZ a = CoordXZ(-33, -2), b = CoordXZ(-1, -2);
 }
 
+/// Holds the linear representation of chunk neighbours (see the «parallel» documentation for more).
+/*
+The length of this, for neighbour radius R, is (2R+1)^2
+= 4 × R^2 + 4 × R + 1
+= 4R(R + 1) + 1
+*/
 package Chunk[] chunkNeighbours;
 
 /** Holds data about neighbouring chunks. This helper struct allows fast getting and setting of custom properties of a chunk or its local neighbours, without having to bake the index arithmetic and conditional ignoring into the user code.

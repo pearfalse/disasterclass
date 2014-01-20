@@ -145,7 +145,7 @@ class World
 		return r;
 	}
 
-	/// Loads a chunk's NBT from the requisite region file.
+	/// Loads a chunk's NBT from the requisite region file. Returns a null array if the chunk does not exist.
 	ubyte[] loadChunkNBT(CoordXZ chunkCoord, Dimension dimension)
 	{
 		auto region = regionForChunk(chunkCoord, dimension);

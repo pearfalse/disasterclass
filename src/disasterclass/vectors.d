@@ -233,6 +233,8 @@ struct CoordXYZ
 
 /***
 	Structure to demarcate the top-down limits of an area in Minecraft. Holds four co-ordinates: west, east, north and south. Convention dictates that these should be chunk co-ordinates, but $(D_KEYWORD Extents) does no checking of this.
+
+	Iteration semantics work on a half-open range basis — the north and west edges are included in the resultant co-ordinates, but the south and east edges are not. (See $(D_KEYWORD Extents.Range) for more.)
 */
 struct Extents
 {
@@ -295,6 +297,7 @@ struct Extents
 		assert(north <= south);
 	}
 
+	/// Range to iterate all points within the $(D_KEYWORD Extents) given.
 	struct Range
 	{
 		this(Extents ex_)
