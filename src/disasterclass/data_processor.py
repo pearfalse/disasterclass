@@ -48,29 +48,20 @@ import std.string : format;
 
 public {
 	string blockOrItemName(BlockID block, BlockData data = 0)
-	in {
-		assert(data <= 15);
-	}
-	body
 	{
-		// note that this code uses the assumption that blocks < 256, items >= 256.
-		// it won't be this way forever.
+		auto firstMatchB = block in Blocks;
 
-		if (block <= 255) {
-			auto firstMatchB = block in Blocks;
-			if (firstMatchB is null || firstMatchB.name is null) return "[unknown block %%d]".format(block);
-
+		if (firstMatchB !is null) {
+			assert(data <= 15);
 			if (firstMatchB.subData is null) return firstMatchB.name;
 			return firstMatchB.subData.subName[data];
-		}	
-
-		else {
-			auto firstMatchI = block in Items;
-			if (firstMatchI is null || firstMatchI.name is null) return "[unknown item %%d]".format(block);
-
-			// todo: use damage for subitem
-			return firstMatchI.name;
 		}
+			
+		auto firstMatchI = block in Items;
+		if (firstMatchI is null || firstMatchI.name is null) return "[unknown item %%d]".format(block);
+
+		// todo: use damage for subitem
+		return firstMatchI.name;
 	}
 }
 
