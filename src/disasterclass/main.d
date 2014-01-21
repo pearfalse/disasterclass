@@ -334,18 +334,10 @@ ExitCode main_frequency(string[] args)
 		BlockID blockType;
 	}
 
-	// these two msg types are a hack until MTContext.broadcast is implemented
-	struct FrequencyRequestTrackingListMsg { }
-
 	struct FrequencyTrackingListMsg { immutable(BlockID)[] list; }
 
 	class FrequencyContext : WTContext
 	{
-		override void begin()
-		{
-			// hack
-			//manager.send(FrequencyRequestTrackingListMsg());
-		}
 
 		override void processChunk(Chunk c, ubyte pass)
 		{
