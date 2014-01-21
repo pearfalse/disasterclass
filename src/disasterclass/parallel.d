@@ -11,7 +11,6 @@ module disasterclass.parallel;
 import disasterclass.world;
 import disasterclass.support;
 import disasterclass.chunk;
-import disasterclass.cbuffer;
 import disasterclass.nbt : isValidNBT;
 
 import std.concurrency;
