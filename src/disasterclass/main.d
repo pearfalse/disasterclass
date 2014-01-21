@@ -160,6 +160,7 @@ int main(string[] args)
 		Options.nThreads = totalCPUs;
 		getopt(args,
 			std.getopt.config.caseInsensitive,
+			std.getopt.config.passThrough,
 			"world", &Options.worldPath,
 			"dimension", &Options.parseDimensionString,
 			"cachesize", &Options.cacheSizes,
@@ -328,6 +329,28 @@ ExitCode main_stats(string[] args)
 
 ExitCode main_frequency(string[] args)
 {
+	BlockID[] blocksToTrack;
+
+	void parseBlockString(string _, string s)
+	{
+		with (BlockType) switch (s) {
+			case "ores":
+			blocksToTrack = [Coal_Ore, Iron_Ore, Gold_Ore, Diamond_Ore, Lapis_Lazuli_Ore, Emerald_Ore, Redstone_Ore];
+			return;
+		
+			case "redstone":
+			blocksToTrack = [Redstone_Wire, Redstone_Torch_inactive, Redstone_Torch_active, Redstone_Repeater_inactive, Redstone_Repeater_active, Redstone_Lamp_inactive, Redstone_Lamp_active, Block_of_Redstone, Weighted_Pressure_Plate_Light, Weighted_Pressure_Plate_Heavy, Dispenser, Dropper, Powered_Rail, Detector_Rail, Piston, Sticky_Piston, Stone_Pressure_Plate, Wooden_Pressure_Plate, Stone_Button, Wooden_Button, Lever, Trapped_Chest, Tripwire, Tripwire_Hook, Daylight_Sensor, Hopper, Activator_Rail];
+			return;
+
+			default:
+			blocksToTrack = s.splitter(',').map!(to!BlockID)().array();
+			return;
+		}
+		assert(0);
+	}
+
+	getopt(args, std.getopt.config.caseInsensitive, "frequency-blocks", &parseBlockString);
+
 	struct FrequencyResultMsg
 	{
 		immutable(ulong)[] counts;
@@ -387,6 +410,8 @@ ExitCode main_frequency(string[] args)
 		{
 			mBlockTypesToTrack = blockTypesToTrack;
 
+			writefln("Tracking frequency of these blocks: %s", blockTypesToTrack.map!(blockOrItemName)().joiner(", "));
+
 			foreach (blockType ; mBlockTypesToTrack) {
 				mGlobalTracker[blockType] = new ulong[Chunk.Height + 1];
 				// index Chunk.Height stores total number blocks of this type found at all (i.e. sum(mGlobalTracker[0..Chunk.Height]) == mGlobalTracker[Chunk.Height])
@@ -395,7 +420,7 @@ ExitCode main_frequency(string[] args)
 
 		override void begin()
 		{
-			debug stderr.writefln("[MT] Broadcasting FrequencyTrackingListMsg");
+			//debug stderr.writefln("[MT] Broadcasting FrequencyTrackingListMsg");
 			broadcast(FrequencyTrackingListMsg(mBlockTypesToTrack));
 		}
 
@@ -411,7 +436,7 @@ ExitCode main_frequency(string[] args)
 				globalCount += threadCount;
 				globalCounts[Chunk.Height] += threadCount;
 			}
-			debug stderr.writefln("Found %d blocks total of block id %d", globalCounts[Chunk.Height], msg.blockType);
+			//debug stderr.writefln("Found %d blocks total of block id %d", globalCounts[Chunk.Height], msg.blockType);
 		}
 
 	private:
@@ -419,23 +444,19 @@ ExitCode main_frequency(string[] args)
 		immutable(BlockID)[] mBlockTypesToTrack;
 	}
 
-	// hack: only look at the ores
-
-	immutable(BlockID)[] toTrack = [BlockType.Coal_Ore, BlockType.Iron_Ore, BlockType.Gold_Ore, BlockType.Diamond_Ore, BlockType.Lapis_Lazuli_Ore, BlockType.Emerald_Ore, BlockType.Redstone_Ore];
-
-	scope ctx = new FrequencyMTContext(toTrack);
+	scope ctx = new FrequencyMTContext(blocksToTrack.idup);
 	auto result = runParallelTask(mainWorld, Options.dimension, typeid(FrequencyContext), ctx);
 
 	writeln("Frequency results:");
 	foreach (blockType, counts ; ctx.mGlobalTracker) {
 		writefln("%s (block ID %d)", blockOrItemName(blockType), blockType);
 		auto total = counts[Chunk.Height];
-		debug stderr.writefln("Index 256 total: %d. Reduce-sum total: %d.", counts[Chunk.Height], reduce!"a + b"(0UL, counts[0 .. Chunk.Height]));
+		//debug stderr.writefln("Index 256 total: %d. Reduce-sum total: %d.", counts[Chunk.Height], reduce!"a + b"(0UL, counts[0 .. Chunk.Height]));
 		if (total == 0) {
 			writeln(" (no blocks found)");
 			continue;
 		}
-		foreach (y, freq ; zip(iota(Chunk.Height), counts[0 .. $-1]).find!"a[1] != 0"().retro().find!"a[1] != 0"()) {
+		foreach (y, freq ; zip(iota(Chunk.Height), counts[0 .. $-1]).retro().filter!"a[1] != 0"()) {
 			writefln("%4d: %d (%.4f%%)", y, freq, cast(real) (freq * 100) / total);
 		}
 	}
