@@ -15,8 +15,7 @@ struct Version
 	,Minor     = 0
 	,Revision  = 35
 	;
-	// uint BuildNumber;
-
+	
 	enum string String = "%d.%d.%d".format(Major, Minor, Revision);
 
 	debug enum string _debug = " (DEBUG)";
@@ -33,8 +32,6 @@ struct Version
 	enum string Platform = _platform ~ _debug ~ ' ' ~ _arch;
 
 }
-
-//__gshared immutable VersionInfo Version = VersionInfo(0, 0, 26);
 
 version(dc13PrintVersion) void main()
 {
