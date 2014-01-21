@@ -23,7 +23,7 @@ import std.file;
 import std.stdio;
 import std.exception;
 import std.algorithm;
-import std.range : lockstep;
+import std.range;
 import std.string;
 import std.array : join, joiner, minimallyInitializedArray;
 import std.format : formattedRead;
@@ -51,6 +51,7 @@ static this()
 	cmdstemp["cityscape"  ] = &main_cityscape;
 	cmdstemp["australia"  ] = &main_australia;
 	cmdstemp["atlantis"   ] = &main_atlantis;
+	cmdstemp["frequency"  ] = &main_frequency;
 
 	cmdstemp["querydata"] = &main_querydata;
 
@@ -323,6 +324,131 @@ ExitCode main_stats(string[] args)
 	else writefln("No blocks found in \"%s\" > %s", mainWorld.name, dimension);
 
 	return ExitCode.Success;	
+}
+
+ExitCode main_frequency(string[] args)
+{
+	struct FrequencyResultMsg
+	{
+		immutable(ulong)[] counts;
+		BlockID blockType;
+	}
+
+	// these two msg types are a hack until MTContext.broadcast is implemented
+	struct FrequencyRequestTrackingListMsg { }
+
+	struct FrequencyTrackingListMsg { immutable(BlockID)[] list; }
+
+	class FrequencyContext : WTContext
+	{
+		override void begin()
+		{
+			// hack
+			//manager.send(FrequencyRequestTrackingListMsg());
+		}
+
+		override void processChunk(Chunk c, ubyte pass)
+		{
+			//debug stderr.writefln("[freq] Processing chunk %s", c.coord);
+			foreach (blockType, counts ; mTracker) {
+				const(BlockID)[] chunkBlocks = c.blocks[];
+				foreach (y ; 0..Chunk.Height) {
+					foreach (z ; 0..Chunk.Length) foreach (x ; 0..Chunk.Length) {
+						if (chunkBlocks.front == blockType) ++counts.front;
+						chunkBlocks.popFront();
+					}
+					//debug stderr.writefln("[freq] %s y=%d count=%d", c.coord, y, counts.front);
+					counts.popFront(); // reduce output slice
+				}
+			}
+		}
+
+		override void processMessage(Variant v)
+		{
+			debug stderr.writefln("[WT%d] Trace: FrequencyContext.processMessage (%s)", this.threadId, v.type());
+			if (v.peek!FrequencyTrackingListMsg()) {
+				auto msg = v.get!FrequencyTrackingListMsg();
+				foreach (blockType ; msg.list) {
+					debug stderr.writefln("[WT%d]: initing search for block type %d", this.threadId, blockType);
+					mTracker[blockType] = new ulong[Chunk.Height];
+				}
+				mTracker.rehash();
+			}
+		}
+
+		override void cleanup()
+		{
+			foreach (blockType, ref counts ; mTracker) {
+				manager.send(FrequencyResultMsg(counts.assumeUnique(), blockType));
+				counts = null;
+			}
+		}
+
+	private:
+		ulong[][BlockID] mTracker;
+		immutable(BlockID)[] sBlocksToTrack;
+	}
+
+	class FrequencyMTContext : MTContext
+	{
+		this(immutable(BlockID)[] blockTypesToTrack)
+		{
+			mBlockTypesToTrack = blockTypesToTrack;
+
+			foreach (blockType ; mBlockTypesToTrack) {
+				mGlobalTracker[blockType] = new ulong[Chunk.Height + 1];
+				// index Chunk.Height stores total number blocks of this type found at all (i.e. sum(mGlobalTracker[0..Chunk.Height]) == mGlobalTracker[Chunk.Height])
+			}
+		}
+
+		override void begin()
+		{
+			debug stderr.writefln("[MT] Broadcasting FrequencyTrackingListMsg");
+			broadcast(FrequencyTrackingListMsg(mBlockTypesToTrack));
+		}
+
+		override void processMessage(Variant v)
+		{
+			auto msg = v.peek!FrequencyResultMsg();
+			if (msg is null) return;
+
+			assert(msg.blockType in mGlobalTracker);
+
+			auto globalCounts = mGlobalTracker[msg.blockType];
+			foreach (threadCount, ref globalCount ; lockstep(msg.counts, globalCounts)) {
+				globalCount += threadCount;
+				globalCounts[Chunk.Height] += threadCount;
+			}
+			debug stderr.writefln("Found %d blocks total of block id %d", globalCounts[Chunk.Height], msg.blockType);
+		}
+
+	private:
+		ulong[][BlockID] mGlobalTracker;
+		immutable(BlockID)[] mBlockTypesToTrack;
+	}
+
+	// hack: only look at the ores
+
+	immutable(BlockID)[] toTrack = [BlockType.Coal_Ore, BlockType.Iron_Ore, BlockType.Gold_Ore, BlockType.Diamond_Ore, BlockType.Lapis_Lazuli_Ore, BlockType.Emerald_Ore, BlockType.Redstone_Ore];
+
+	scope ctx = new FrequencyMTContext(toTrack);
+	auto result = runParallelTask(mainWorld, Options.dimension, typeid(FrequencyContext), ctx);
+
+	writeln("Frequency results:");
+	foreach (blockType, counts ; ctx.mGlobalTracker) {
+		writefln("%s (block ID %d)", blockOrItemName(blockType), blockType);
+		auto total = counts[Chunk.Height];
+		debug stderr.writefln("Index 256 total: %d. Reduce-sum total: %d.", counts[Chunk.Height], reduce!"a + b"(0UL, counts[0 .. Chunk.Height]));
+		if (total == 0) {
+			writeln(" (no blocks found)");
+			continue;
+		}
+		foreach (y, freq ; zip(iota(Chunk.Height), counts[0 .. $-1]).find!"a[1] != 0"().retro().find!"a[1] != 0"()) {
+			writefln("%4d: %d (%.4f%%)", y, freq, cast(real) (freq * 100) / total);
+		}
+	}
+
+	return ExitCode.Success;
 }
 
 /++
