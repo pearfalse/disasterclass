@@ -41,10 +41,14 @@ protected:
 	/// Called when worker threads are finished.
 	void cleanup() { }
 
-	final void broadcast(Args...)(Args a)
+	final void broadcast(T)(T msg)
 	{
-		foreach (tid ; mWorkerTids) {
-			if (tid != Tid.init) tid.send(a);
+		debug stderr.writefln("mWorkerTids: %s", mWorkerTids.map!(a => a == Tid.init ? "." : "*")().join(""));
+		foreach (i, tid ; mWorkerTids) {
+			if (tid != Tid.init) {
+				debug stderr.writefln("Broadcasting msg %s to tid at index %d...", typeid(msg), i);
+				tid.send(msg);
+			}
 		}
 	}
 
@@ -531,6 +535,10 @@ private struct WT
 					},
 					(NoMoreRationsMsg _) {
 						done = true;
+					},
+
+					(OwnerTerminated e) {
+						throw e;
 					}
 				);
 
@@ -667,7 +675,13 @@ private struct WT
 
 				(ChunkStreamDoneMsg _) {
 					chunkStreamEmpty = true;
-				}
+				},
+
+				(OwnerTerminated e) {
+					throw e;
+				},
+
+				(Variant v) { context.processMessage(v); }
 				);
 
 			if (thisChunk is null) {
