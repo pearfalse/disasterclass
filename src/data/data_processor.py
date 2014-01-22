@@ -161,7 +161,7 @@ def makeEnumName(s):
 		return rMusicDisc.sub("Music_Disc_\\1", s)
 	else:
 		# do standard substitutions
-		return s.replace("\x20", "_").replace("'", '').replace("(", '').replace(")", '') # assuming no other problems		
+		return s.replace("\x20", "_").replace("'", '').replace("(", '').replace(")", '').replace("-", '') # assuming no other problems		
 
 Fields = {}
 Fields['Date'] = datetime.now().isoformat()

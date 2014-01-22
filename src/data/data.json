@@ -1015,6 +1015,12 @@
             "Name": "Name Tag"
         },
         {
+            "MaxStack": 1,
+            "Flags": [],
+            "Id": 422,
+            "Name": "Minecart with Command Block"
+        },
+        {
             "MaxStack": 1, 
             "Flags": [], 
             "Id": 2256, 
@@ -1118,7 +1124,9 @@
             "MaxStack": 64, 
             "Flags": [
                 "Opaque",
-                "Solid"
+                "Solid",
+                "HasData",
+                "UsesDamage"
             ], 
             "Id": 3, 
             "Name": "Dirt"
@@ -1201,7 +1209,9 @@
             "Flags": [
                 "SensitiveToPlacement",
                 "Opaque",
-                "Solid"
+                "Solid",
+                "HasData",
+                "UsesDamage"
             ], 
             "Id": 12, 
             "Name": "Sand"
@@ -1461,7 +1471,7 @@
                 "Transparent"
             ], 
             "Id": 38, 
-            "Name": "Rose"
+            "Name": "Flower"
         }, 
         {
             "MaxStack": 64, 
@@ -1982,7 +1992,7 @@
             "Name": "Nether Portal"
         }, 
         {
-            "Light": 14, 
+            "Light": 15, 
             "MaxStack": 64, 
             "Flags": [
                 "HasData",
@@ -2033,11 +2043,13 @@
             "Light": 15, 
             "MaxStack": 64, 
             "Flags": [
-                "Opaque",
-                "Solid"
+                "Transparent",
+                "Solid",
+                "HasData",
+                "UsesDamage"
             ], 
             "Id": 95, 
-            "Name": "Locked Chest"
+            "Name": "Stained Glass"
         }, 
         {
             "MaxStack": 64, 
@@ -2679,11 +2691,21 @@
                 "HasData",
                 "Opaque",
                 "Solid",
-                "HasData",
                 "UsesDamage"
             ],
             "Id": 159,
             "Name": "Stained Clay"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "HasData",
+                "Opaque",
+                "Solid",
+                "UsesDamage"
+            ],
+            "Id": 162,
+            "Name": "Wood (2)"
         },
         {
             "MaxStack": 64,
@@ -2711,6 +2733,24 @@
             ],
             "Id": 172,
             "Name": "Hardened Clay"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "Opaque",
+                "Solid"
+            ],
+            "Id": 174,
+            "Name": "Packed Ice"
+        },
+        {
+            "MaxStack": 64,
+            "Flags": [
+                "Transparent",
+                "HasData"
+            ],
+            "Id": 175,
+            "Name": "Double-height Plant"
         }
     ]
 }
