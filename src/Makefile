@@ -53,7 +53,7 @@ $(OBJDIR_DEBUG)/%.o: $(SRCDIR)/%.d
 # 	$(DMD) -of$@ -I$(LIBDIR) $(COMPILEFLAGS) $(COMPILEFLAGS_RELEASE) -c $<
 
 itemdata:
-	python $(SRCDIR)/data_processor.py $(SRCDIR)/data.d $(SRCDIR)/data.json
+	python data/data_processor.py $(SRCDIR)/data.d data/data.json
 
 version_tool: $(SRCDIR)/versioninfo.d
 	$(DMD) -ofversion_tool -property -version=dc13PrintVersion $(SRCDIR)/versioninfo.d
