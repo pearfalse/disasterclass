@@ -19,7 +19,7 @@ debug import std.stdio : stderr;
 /// Helpful alises for sized integers used in Minecraft data.
 alias ushort BlockID;
 alias ushort ItemID;      /// ditto
-alias byte BiomeType;     /// ditto
+alias ubyte BiomeType;    /// ditto
 alias ubyte BlockData;    /// ditto
 alias ushort ItemDamage;  /// ditto
 
